@@ -3,12 +3,11 @@ import paypal from '../../../assets/images/paypal.gif'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Select from 'react-select'
-import Modal from 'react-modal'
-import FormattedList from '../components/FormattedList'
+// import Modal from 'react-modal'
+// import FormattedList from '../components/FormattedList'
 import UnitEntryButton from '../components/UnitEntryButton'
 import UnitEntryNameTile from '../components/UnitEntryNameTile'
 import MagicItemIcon from '../components/MagicItemIcon'
-
 import MagicItemSelectionTile from '../components/MagicItemSelectionTile'
 
 class WmrInnerContainer extends Component {
@@ -55,8 +54,20 @@ class WmrInnerContainer extends Component {
 
 	}
 
-	addUnitToList() {
-
+	addUnitToList(unitToAdd) {
+		let listedUnits = this.state.listedUnits
+		let indexCount = this.state.indexCount
+		let unitToAddWithIndex = { index: indexCount, unit: unitToAdd }
+		listedUnits.push(unitToAddWithIndex)
+		indexCount += 1
+		// let pointTotal = this.calculatePointTotal(listedUnits)
+		this.setState({
+			listedUnits: listedUnits,
+			indexCount: indexCount,
+			// pointTotal: pointTotal,
+			// maximumCount: this.calculateMinMaxes(pointTotal),
+			magicItemsVisible: false
+		})
 	}
 
 	removeUnitFromList() {
@@ -194,14 +205,31 @@ class WmrInnerContainer extends Component {
 							key={unitObject.index}
 							id={unitObject.index}
 							unitObject={unitObject}
-							selectedArtifacts={this.state.selectedArtifacts}
+							selectedMagicItems={this.state.selectedMagicItems}
 							removeMagicItem={this.removeMagicItem}
 							removeUnitFromList={this.removeUnitFromList}
 						/>
 					</div>
 				)
 			})
+
+			if (this.state.listedUnits.length > 0) {
+				viewListButtonDisplay =
+					<div className={style['view-list-button-div']}>
+						<br /><br />
+						<span onClick={this.toggleFormattedList} className={style['view-list-button']}>
+							View List
+						</span>
+					</div>
+			} else {
+				viewListButtonDisplay =
+					<div className={style['instruction']}>
+						<i>Click units to the left to add them to the list</i>
+					</div>
+			}			
 		}
+
+
 
 		let listOutputSide =
 			<div>
@@ -254,7 +282,7 @@ class WmrInnerContainer extends Component {
 							</span>
 						</div>
 						<div className={style['main-title-box-wmr']}>
-							<h2 className={style['main-title']}>Make a Good Warmaster Revolution List</h2>
+							<h2 className={style['main-title']}>Make a Good Warmaster Reform List</h2>
 						</div>
 						<div className={style['copyright-notice']}>All content is unofficial and unendorsed by Games Workshop Limited</div>
 						<div className={style['css-remover']}>

@@ -107,7 +107,7 @@ hr {
 }
 
 .main-title-box-wmr {
-	background-color: #235347;
+	background-color: #1d4f44;
 	border-radius: 6px;
 	overflow: hidden;
 	margin-bottom: 10px;
@@ -178,7 +178,7 @@ hr {
 
 .unit-entry-button-title-bar-wmr {
 	border-radius: 6px;
-	background-color: #235347;
+	background-color: #1d4f44;
 	color: #FFFFFF;
 	border: 1px solid #000000;
 	margin-bottom: 7px;
@@ -211,7 +211,7 @@ hr {
 }
 
 .unit-entry-button-point-value-label-wmr {
-	color: #235347;
+	color: #4b907b;
 	padding: 2px 0px 2px 0px;
 	margin: 0px 15px 0px 2px;
 }
@@ -348,7 +348,7 @@ hr {
 
 .list-entry-label-wmr {
 	cursor: crosshair;
-	color: #235347;
+	color: #1d4f44;
 	font-weight: bolder;	
 }
 
@@ -391,7 +391,7 @@ hr {
 
 .list-title-bar-wmr {
 	border-radius: 6px;
-	background-color: #235347;
+	background-color: #1d4f44;
 	color: #FFFFFF;
 	border: 1px solid #000000;
 	margin-bottom: 2px;
@@ -464,7 +464,7 @@ hr {
 }
 
 .magic-item-title-wmr {
-	color: #235347;
+	color: #1d4f44;
 	font-weight: bolder;
 }
 
@@ -503,7 +503,7 @@ hr {
 }
 
 .magic-item-points-label-wmr {
-	color: #235347;
+	color: #4b907b;
 	padding: 2px 0px 2px 0px;
 	margin: 0px 15px 0px 2px;
 }
