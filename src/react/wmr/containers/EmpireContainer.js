@@ -16,7 +16,6 @@ class EmpireContainer extends Component {
 		this.state = {
 			listedUnits: [
 				{
-					index: 1000000,	
 					count: 2,
 					unit: {
 						id: 1,
@@ -44,7 +43,6 @@ class EmpireContainer extends Component {
 					}
 				},
 				{
-					index: 1000001,
 					count: 2,
 					unit: {
 						id: 3,
@@ -57,7 +55,7 @@ class EmpireContainer extends Component {
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
-						order_within_army: 2,
+						order_within_army: 3,
 						attacks: '3',
 						hits: '3',
 						armor: '0',
@@ -72,7 +70,6 @@ class EmpireContainer extends Component {
 					}
 				},
 				{
-					index: 1000002,
 					count: 1,
 					unit: {
 						id: 1000000,
@@ -103,6 +100,7 @@ class EmpireContainer extends Component {
 			selectedMagicItems: [],
 			pointTotal: 325,
 			formattedListVisible: false,
+			auxiliariesVisible: false,
 			magicItemsVisible: false,
 			unitBeingGivenMagicItem: ''
 		}
@@ -137,6 +135,7 @@ class EmpireContainer extends Component {
 
 	addUnit(unitToAdd) {
 		let listedUnits = this.state.listedUnits
+		let indexCount = this.state.indexCount
 		let duplicateCount = 0
 		let i2
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
@@ -147,7 +146,6 @@ class EmpireContainer extends Component {
 		}
 		if (duplicateCount === 0) {
 			let unitToAddWithCount = {
-				index: unitToAdd.order_within_army,
 				count: 1,
 				unit: unitToAdd
 			}
@@ -163,8 +161,39 @@ class EmpireContainer extends Component {
 		})
 	}
 
-	removeUnit() {
+	removeUnit(unitToRemove) {
+		let listedUnits = this.state.listedUnits
+		let i2
+		for (i2 = 0; i2 < listedUnits.length; i2++) {
+			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
+				if (
+					unitToRemove.unit.name === 'Halberdiers (The Empire)' ||
+					unitToRemove.unit.name === 'Crossbowmen (The Empire)'
+				) {
+					if (listedUnits[i2].count > 2) {
+						listedUnits[i2].count -= 1
+					}
+				}
+				if (
+					unitToRemove.unit.name !== 'Halberdiers (The Empire)' &&
+					unitToRemove.unit.name !== 'Crossbowmen (The Empire)' &&
+					unitToRemove.unit.unit_type !== 'General'
+				) {
+					if (listedUnits[i2].count > 1) {
+						listedUnits[i2].count -= 1
+					} else {
+						listedUnits.splice(listedUnits.indexOf(listedUnits[i2]), 1)
+					}
+				}
+			}
+		}
 
+
+		this.setState({
+			listedUnits: listedUnits,
+			auxiliariesVisible: false,
+			magicItemsVisible: false
+		})
 	}
 
 	addAuxiliary() {
@@ -229,7 +258,7 @@ class EmpireContainer extends Component {
 		this.setState({
 			listedUnits: [
 				{
-					index: 1000000,	
+					index: 0,	
 					count: 2,
 					unit: {
 						game_id: 2,
@@ -256,7 +285,7 @@ class EmpireContainer extends Component {
 					}
 				},
 				{
-					index: 1000001,
+					index: 1,
 					count: 2,
 					unit: {
 						game_id: 2,
@@ -283,7 +312,7 @@ class EmpireContainer extends Component {
 					}
 				},
 				{
-					index: 1000002,
+					index: 2,
 					count: 1,
 					unit: {
 						game_id: 2,
@@ -313,6 +342,7 @@ class EmpireContainer extends Component {
 			selectedMagicItems: [],
 			pointTotal: 325,
 			formattedListVisible: false,
+			auxiliariesVisible: false,
 			magicItemsVisible: false,
 			unitBeingGivenMagicItem: ''
 		})
@@ -401,14 +431,14 @@ class EmpireContainer extends Component {
 				>
 					<div className={style['list-entry-div']}>
 						<MagicItemIcon
-							key={unitObject.unit.order_within_army}
-							id={parseInt(unitObject.unit.id)}
+							key={parseInt(unitObject.unit.order_within_army)}
+							id={parseInt(unitObject.unit.order_within_army)}
 							unitObject={unitObject}
 							updateUnitBeingGivenMagicItem={this.updateUnitBeingGivenMagicItem}
 						/>
 						<AuxiliaryIcon
-							key={unitObject.unit.order_within_army + 20000}
-							id={parseInt(unitObject.unit.id)}
+							key={parseInt(unitObject.unit.order_within_army) + 20000}
+							id={parseInt(unitObject.unit.order_within_army)}
 							unitObject={unitObject}
 							updateUnitBeingGivenAuxiliary={this.updateUnitBeingGivenAuxiliary}
 						/>

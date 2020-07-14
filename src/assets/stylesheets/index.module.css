@@ -444,7 +444,7 @@ hr {
 	font-style: italic;
 }
 
-.unit-option-selection-tile {
+.unit-option-selection-tile, .auxiliary-selection-tile {
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
@@ -463,12 +463,17 @@ hr {
 	font-weight: bolder;
 }
 
+.auxiliary-title-wmr {
+	color: #1d4f44;
+	font-weight: bolder;
+}
+
 .magic-item-title-wmr {
 	color: #1d4f44;
 	font-weight: bolder;
 }
 
-.artifact-selection-tile {
+.artifact-selection-tile, .magic-item-selection-tile {
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;

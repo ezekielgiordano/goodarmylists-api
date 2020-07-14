@@ -133,7 +133,6 @@ class WmrOuterContainer extends Component {
 					units={this.state.units}
 					auxiliaries={this.state.auxiliaries}
 					magicItems={this.state.magicItems}
-					spells={this.state.spells}
 					dropdownStyle={dropdownStyle}
 				/>
 			</div>
