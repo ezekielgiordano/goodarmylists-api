@@ -75,13 +75,6 @@ wmr_auxiliaries.each do |row|
 end
 wmr_auxiliaries_json = wmr_auxiliaries_array.to_json
 
-wmr_spells = data.exec('SELECT * FROM wmr_spells;')
-wmr_spells_array = []
-wmr_spells.each do |row|
-	wmr_spells_array << row
-end
-wmr_spells_json = wmr_spells_array.to_json
-
 wmr_magic_items = data.exec('SELECT * FROM wmr_magic_items;')
 wmr_magic_items_array = []
 wmr_magic_items.each do |row|
@@ -138,11 +131,6 @@ end
 get '/api/v1/wmr_auxiliaries' do
 	content_type :json
 	wmr_auxiliaries_json
-end
-
-get '/api/v1/wmr_spells' do
-	content_type :json
-	wmr_spells_json
 end
 
 get '/api/v1/wmr_magic_items' do

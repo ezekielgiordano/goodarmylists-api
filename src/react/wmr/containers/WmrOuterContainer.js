@@ -8,9 +8,8 @@ class WmrOuterContainer extends Component {
 		this.state = {
 			armies: [],
 			units: [],
-			magicItems: [],
-			spells: []
-		}
+			auxiliaries: [],
+			magicItems: []		}
 	}
 
 	componentDidMount() {
@@ -45,6 +44,22 @@ class WmrOuterContainer extends Component {
 			this.setState({ units: body })
 		})
 		.catch(error => console.error(`Error in fetch: ${error.message}`))
+
+		fetch('/api/v1/wmr_auxiliaries')
+		.then(response => {
+			if (response.ok) {
+				return response
+			} else {
+				let errorMessage = `${response.status} (${response.statusText})`,
+				error = new Error(errorMessage)
+				throw(error)
+			}
+		})
+		.then(response => response.json())
+		.then(body => {
+			this.setState({ auxiliaries: body })
+		})
+		.catch(error => console.error(`Error in fetch: ${error.message}`))
 	
 		fetch('/api/v1/wmr_magic_items')
 		.then(response => {
@@ -58,23 +73,7 @@ class WmrOuterContainer extends Component {
 		})
 		.then(response => response.json())
 		.then(body => {
-			this.setState({ unitOptions: body })
-		})
-		.catch(error => console.error(`Error in fetch: ${error.message}`))
-
-		fetch('/api/v1/wmr_spells')
-		.then(response => {
-			if (response.ok) {
-				return response
-			} else {
-				let errorMessage = `${response.status} (${response.statusText})`,
-				error = new Error(errorMessage)
-				throw(error)
-			}
-		})
-		.then(response => response.json())
-		.then(body => {
-			this.setState({ artefacts: body })
+			this.setState({ magicItems: body })
 		})
 		.catch(error => console.error(`Error in fetch: ${error.message}`))
 	}
@@ -132,6 +131,7 @@ class WmrOuterContainer extends Component {
 				<WmrInnerContainer
 					armies={this.state.armies}
 					units={this.state.units}
+					auxiliaries={this.state.auxiliaries}
 					magicItems={this.state.magicItems}
 					spells={this.state.spells}
 					dropdownStyle={dropdownStyle}
