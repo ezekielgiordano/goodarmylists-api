@@ -507,7 +507,7 @@ hr {
 	margin: 0px 15px 0px 2px;
 }
 
-.magic-item-points-label-wmr {
+.auxiliary-points-label-wmr, .magic-item-points-label-wmr {
 	color: #4b907b;
 	padding: 2px 0px 2px 0px;
 	margin: 0px 15px 0px 2px;

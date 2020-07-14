@@ -35,8 +35,7 @@ const MagicItemSelectionTile = props => {
 	return (
 		<div>
 			<h4 className={style['magic-item-title-wmr']}>
-				What Magic Item will<br />
-				{props.unitObject.unit.display_name} have?
+				What Magic Item will be given to {props.unitObject.unit.plural_name}?
 			</h4><br />
 			<div>
 				<span 
