@@ -125,25 +125,31 @@ class EmpireContainer extends Component {
 	calculatePointTotal(unitArray, auxiliaryArray, magicItemArray) {
 		let pointTotal = 0
 		let i2
-		for (i2 = 0; i2 < unitArray.length; i2++) {
-			pointTotal += (parseInt(unitArray[i2].unit.points) * parseInt(unitArray[i2].count))
+		if (unitArray !== 'placeholder') {
+			for (i2 = 0; i2 < unitArray.length; i2++) {
+				pointTotal += (parseInt(unitArray[i2].unit.points) * parseInt(unitArray[i2].count))
+			}
+		} else {
+			for (i2 = 0; i2 < this.state.listedUnits.length; i2++) {
+				pointTotal += (parseInt(this.state.listedUnits[i2].unit.points) * parseInt(this.state.listedUnits[i2].count))
+			}			
 		}
 		if (auxiliaryArray !== 'placeholder') {
 			for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-				pointTotal += parseInt(auxiliaryArray[i2].unit.points)
+				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points)
 			}			
 		} else {
 			for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
-				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].unit.points)
+				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].auxiliary.points)
 			}			
 		}
 		if (magicItemArray !== 'placeholder') {
 			for (i2 = 0; i2 < magicItemArray.length; i2++) {
-				pointTotal += parseInt(magicItemArray[i2].unit.points)
+				pointTotal += parseInt(magicItemArray[i2].magicItem.points)
 			}			
 		} else {
 			for (i2 = 0; i2 < this.state.selectedMagicItems.length; i2++) {
-				pointTotal += parseInt(this.state.selectedMagicItems[i2].unit.points)
+				pointTotal += parseInt(this.state.selectedMagicItems[i2].magicItem.points)
 			}
 		}
 		return pointTotal		
@@ -232,8 +238,21 @@ class EmpireContainer extends Component {
 		})
 	}
 
-	addAuxiliary() {
-
+	addAuxiliary(unitObject, highlightedAuxiliaries) {
+		let i2
+		for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
+			highlightedAuxiliaries[i2] = {
+				unitName: unitObject.unit.name,
+				auxiliary: highlightedAuxiliaries[i2]
+			}
+		}
+		let selectedAuxiliaries = this.state.selectedAuxiliaries.concat(highlightedAuxiliaries)
+		this.setState({
+			selectedAuxiliaries: selectedAuxiliaries,
+			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
+			unitBeingGivenAuxiliary: '',
+		})
+		this.toggleAuxiliaries()
 	}
 
 	removeAuxiliary() {
