@@ -61,7 +61,7 @@ class EmpireContainer extends Component {
 						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 55,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -99,6 +99,7 @@ class EmpireContainer extends Component {
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
 			pointTotal: 325,
+			unitCount: 5,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
 			magicItemsVisible: false,
@@ -121,8 +122,40 @@ class EmpireContainer extends Component {
 		this.clearList = this.clearList.bind(this)
 	}
 
-	calculatePointTotal() {
+	calculatePointTotal(unitArray, auxiliaryArray, magicItemArray) {
+		let pointTotal = 0
+		let i2
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			pointTotal += (parseInt(unitArray[i2].unit.points) * parseInt(unitArray[i2].count))
+		}
+		if (auxiliaryArray !== 'placeholder') {
+			for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
+				pointTotal += parseInt(auxiliaryArray[i2].unit.points)
+			}			
+		} else {
+			for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
+				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].unit.points)
+			}			
+		}
+		if (magicItemArray !== 'placeholder') {
+			for (i2 = 0; i2 < magicItemArray.length; i2++) {
+				pointTotal += parseInt(magicItemArray[i2].unit.points)
+			}			
+		} else {
+			for (i2 = 0; i2 < this.state.selectedMagicItems.length; i2++) {
+				pointTotal += parseInt(this.state.selectedMagicItems[i2].unit.points)
+			}
+		}
+		return pointTotal		
+	}
 
+	calculateUnitCount(unitArray) {
+		let unitCount = 0
+		let i2
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			unitCount += parseInt(unitArray[i2].count)
+		}
+		return unitCount
 	}
 
 	calculateMinMaxes() {
@@ -154,7 +187,8 @@ class EmpireContainer extends Component {
 		// let pointTotal = this.calculatePointTotal(listedUnits)
 		this.setState({
 			listedUnits: listedUnits,
-			// pointTotal: pointTotal,
+			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
+			unitCount: this.calculateUnitCount(listedUnits),
 			// maximumCount: this.calculateMinMaxes(pointTotal),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
@@ -191,6 +225,8 @@ class EmpireContainer extends Component {
 
 		this.setState({
 			listedUnits: listedUnits,
+			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
+			unitCount: this.calculateUnitCount(listedUnits),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -258,9 +294,9 @@ class EmpireContainer extends Component {
 		this.setState({
 			listedUnits: [
 				{
-					index: 0,	
 					count: 2,
 					unit: {
+						id: 1,
 						game_id: 2,
 						wmr_army_id: 1,
 						name: 'Halberdiers (The Empire)',
@@ -285,9 +321,9 @@ class EmpireContainer extends Component {
 					}
 				},
 				{
-					index: 1,
 					count: 2,
 					unit: {
+						id: 3,
 						game_id: 2,
 						wmr_army_id: 1,
 						name: 'Crossbowmen (The Empire)',
@@ -297,13 +333,13 @@ class EmpireContainer extends Component {
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
-						order_within_army: 2,
+						order_within_army: 3,
 						attacks: '3',
 						hits: '3',
 						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 55,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -312,9 +348,9 @@ class EmpireContainer extends Component {
 					}
 				},
 				{
-					index: 2,
 					count: 1,
 					unit: {
+						id: 1000000,
 						game_id: 2,
 						wmr_army_id: 1,
 						name: 'General (The Empire)',
@@ -341,6 +377,7 @@ class EmpireContainer extends Component {
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
 			pointTotal: 325,
+			unitCount: 5,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
 			magicItemsVisible: false,
@@ -419,7 +456,7 @@ class EmpireContainer extends Component {
 		let pointTotalDisplay =
 			<div className={style['point-total']}>
 				Points: <span className={style['bold']}>{this.state.pointTotal}</span><br />
-				Unit Count: <span className={style['bold']}>{listedUnits.length}</span><br />
+				Unit Count: <span className={style['bold']}>{this.state.unitCount}</span><br />
 			</div>
 
 		let listedUnitTileDisplay = listedUnits.map(unitObject => {
