@@ -5,22 +5,16 @@ import MagicItemSelectionLabel from './MagicItemSelectionLabel'
 const MagicItemSelectionTile = props => {
 	let magicItems = props.magicItems
 	let availableMagicItems = []
-	let i
-
-
-
-
-
-	
+	let i2
 
 	let sortedMagicItems = availableMagicItems.sort((a, b) => {
-		return ( parseInt(a.points) - parseInt(b.points) )
+		return ( parseInt(a.id) - parseInt(b.id) )
 	})
 
 	let selectedMagicItemPoints = 0
-	for (i = 0; i < props.selectedMagicItems.length; i++) {
-		if (props.selectedMagicItems[i].index === props.unitObject.index) {
-			selectedMagicItemPoints += parseInt(props.selectedMagicItems[i].magicItem.points)
+	for (i2 = 0; i2 < props.selectedMagicItems.length; i2++) {
+		if (props.selectedMagicItems[i2].index === props.unitObject.index) {
+			selectedMagicItemPoints += parseInt(props.selectedMagicItems[i2].magicItem.points)
 		}
 	}
 
@@ -32,7 +26,7 @@ const MagicItemSelectionTile = props => {
 				key={parseInt(magicItem.id)}
 				unitObject={props.unitObject}
 				magicItem={magicItem}
-				selectMagicItem={props.selectMagicItem}
+				selectMagicItem={props.addMagicItem}
 				greyedOut={greyedOut}
 			/>
 		)

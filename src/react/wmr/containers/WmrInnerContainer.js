@@ -41,6 +41,8 @@ class WmrInnerContainer extends Component {
 				<EmpireContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					auxiliaries={this.props.auxiliaries}
+					magicItems={this.props.magicItems}
 					addUnit={this.addUnit}
 					removeUnit={this.removeUnit}
 					addAuxiliary={this.addAuxiliary}
