@@ -74,10 +74,10 @@ const UnitEntryNameTile = props => {
 		<div className={style['list-entry-div']}>
 			<div>
 				<span 
-					onClick={() => props.removeUnitFromList(props.unitObject)}
-					className={style['list-entry-label']}
+					onClick={() => props.removeUnit(props.unitObject)}
+					className={style['list-entry-label-wmr']}
 				>
-					{props.unitObject.unit.display_name}
+					{props.unitObject.count}{'x '}{props.unitObject.unit.display_name}
 				</span>
 			</div>
 				{magicWeaponText}
