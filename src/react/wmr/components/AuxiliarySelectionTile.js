@@ -12,8 +12,12 @@ class AuxiliarySelectionTile extends Component {
 	}
 
 	updateHighlightedAuxiliaries(auxiliary, highlightingAction) {
+		let selectedAuxiliaries = this.props.selectedAuxiliaries
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
 		let i2
+
+
+
 		if (highlightingAction === 'remove') {
 			let newHighlightedAuxiliaries = []
 			for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
@@ -24,10 +28,32 @@ class AuxiliarySelectionTile extends Component {
 			highlightedAuxiliaries = newHighlightedAuxiliaries
 		}
 		if (highlightingAction === 'add') {
+			if (
+				 (
+					auxiliary.special_rules.includes('not independent') === false ||
+					auxiliary.special_rules.includes('not independent') === 'f'
+				)
+			) {
+				for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
+					if (
+						highlightedAuxiliaries.length >= this.props.unitObject.count && (
+							highlightedAuxiliaries[i2].special_rules.includes('not independent') === false ||
+							highlightedAuxiliaries[i2].special_rules.includes('not independent') === 'f'
+						)
+					) {
+						highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
+					}
+				}
+			}			
 			highlightedAuxiliaries.push(auxiliary)
 		}
 
-		this.setState({ highlightedAuxiliaries: highlightedAuxiliaries })
+		let sortedHighlightedAuxiliaries = highlightedAuxiliaries.sort((a, b) => {
+			return ( parseInt(a.id) - parseInt(b.id) )
+		})
+		highlightedAuxiliaries = sortedHighlightedAuxiliaries
+
+		this.setState({	highlightedAuxiliaries: highlightedAuxiliaries })
 	}
 
 	render() {
@@ -59,11 +85,12 @@ class AuxiliarySelectionTile extends Component {
 		
 		let mountDisplay = sortedMounts.map(auxiliary => {
 			let highlighted = false
-			let duplicateAuxiliaryCount = 1
+			let duplicateAuxiliaryCount = 0
 
 			for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
 				if (highlightedAuxiliaries[i2].name === auxiliary.name) {
 					highlighted = true
+					duplicateAuxiliaryCount += 1
 				}
 			}
 
@@ -103,11 +130,21 @@ class AuxiliarySelectionTile extends Component {
 				/>
 			)
 		})
+		let question
+		if (unitObject.unit.unit_type === 'Hero' || unitObject.unit.unit_type === 'Wizard') {
+			if (unitObject.count > 1) {
+				question = `What option(s) will be given to ${unitObject.unit.option_screen_name}?`
+			} else {
+				question = `What option(s) will be given to ${unitObject.unit.singular_name}?`
+			}
+		} else {
+			question = `What option(s) will be given to ${unitObject.unit.option_screen_name}?`
+		}
 
 		return (
 			<div>
 				<h4 className={style['auxiliary-title-wmr']}>
-					What option(s) will be given to	{unitObject.unit.plural_name}?
+					{question}
 				</h4><br />
 				<div className={style['unit-option-selections']}>
 					{nonMountDisplay}

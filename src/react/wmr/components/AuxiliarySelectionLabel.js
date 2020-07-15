@@ -9,28 +9,17 @@ const AuxiliarySelectionLabel = props => {
 
 	let className
 	let highlightingAction
-	if (props.auxiliary.special_rules.includes('not independent')) {
-		if (props.highlighted === true) {
-			className = style['unit-option-selection-label-highlighted-unit-option']
-			if (props.unitObject.count > (props.duplicateAuxiliaryCount)) {
-				highlightingAction = 'add'				
-			} else {
-				highlightingAction = 'remove'
-			}
-		}
-		if (props.highlighted === false) {
-			className = style['unit-option-selection-label']
-			highlightingAction = 'add'
-		}
-	} else {
-		if (props.highlighted === true) {
-			className = style['unit-option-selection-label-highlighted-unit-option']
+	if (props.highlighted === true) {
+		className = style['unit-option-selection-label-highlighted-unit-option']
+		if (props.unitObject.count > (props.duplicateAuxiliaryCount)) {
+			highlightingAction = 'add'				
+		} else {
 			highlightingAction = 'remove'
 		}
-		if (props.highlighted === false) {
-			className = style['unit-option-selection-label']
-			highlightingAction = 'add'
-		}
+	}
+	if (props.highlighted === false) {
+		className = style['unit-option-selection-label']
+		highlightingAction = 'add'
 	}
 
 	let pointDisplay
@@ -41,7 +30,7 @@ const AuxiliarySelectionLabel = props => {
 	}
 
 	let countDisplay
-	if (props.duplicateAuxiliaryCount > 0 && props.auxiliary.special_rules.includes('not independent')) {
+	if (props.duplicateAuxiliaryCount > 0) {
 		countDisplay = `${props.duplicateAuxiliaryCount}x `
 	}
 

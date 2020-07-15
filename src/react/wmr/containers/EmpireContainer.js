@@ -23,7 +23,7 @@ class EmpireContainer extends Component {
 						wmr_army_id: 1,
 						name: 'Halberdiers (The Empire)',
 						display_name: 'Halberdier unit',
-						plural_name: 'Halberdiers',
+						option_screen_name: 'Halberdiers',
 						singular_name: 'Halberdier',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
@@ -50,7 +50,7 @@ class EmpireContainer extends Component {
 						wmr_army_id: 1,
 						name: 'Crossbowmen (The Empire)',
 						display_name: 'Crossbowman unit',
-						plural_name: 'Crossbowmen',
+						option_screen_name: 'Crossbowmen',
 						singular_name: 'Crossbowman',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
@@ -77,7 +77,7 @@ class EmpireContainer extends Component {
 						wmr_army_id: 1,
 						name: 'General (The Empire)',
 						display_name: 'General',
-						adjective: 'General',
+						option_screen_name: 'the General',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
@@ -136,7 +136,7 @@ class EmpireContainer extends Component {
 		}
 		if (auxiliaryArray !== 'placeholder') {
 			for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points)
+				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points * auxiliaryArray[i2].count)
 			}			
 		} else {
 			for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
@@ -239,14 +239,69 @@ class EmpireContainer extends Component {
 	}
 
 	addAuxiliary(unitObject, highlightedAuxiliaries) {
+		let selectedAuxiliaries = []
 		let i2
-		for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
-			highlightedAuxiliaries[i2] = {
-				unitName: unitObject.unit.name,
-				auxiliary: highlightedAuxiliaries[i2]
+
+		for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
+			if (this.state.selectedAuxiliaries[i2].unitName !== unitObject.unit.name) {
+				selectedAuxiliaries.push(this.state.selectedAuxiliaries[i2])
 			}
 		}
-		let selectedAuxiliaries = this.state.selectedAuxiliaries.concat(highlightedAuxiliaries)
+
+		let checkIfAllTheSame = array => {
+    		let first = array[0]
+    		return array.every(element => {
+        		return element === first
+    		})
+		}
+
+		let newAuxiliaries = []
+		let newAuxiliary
+		let count = 1
+		if (highlightedAuxiliaries.length > 0) {
+			if (checkIfAllTheSame(highlightedAuxiliaries) === false) {
+
+
+
+				for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
+					if (count === 1) {
+						newAuxiliary = {
+							unitName: unitObject.unit.name,
+							count: count,
+							auxiliary: highlightedAuxiliaries[i2]
+						}
+						count += 1
+					} else {
+						if (highlightedAuxiliaries[i2].name === newAuxiliary.auxiliary.name) {
+							newAuxiliary.count += 1
+							// if (i2 + 1 === highlightedAuxiliaries.length) {
+							// 	newAuxiliaries.push(newAuxiliary)
+							// }
+						} else {
+							newAuxiliaries.push(newAuxiliary)
+							count = 1					
+						}
+					}
+
+
+				}
+				newAuxiliary.count += 1
+				newAuxiliaries.push(newAuxiliary)
+
+
+
+			} else {
+				newAuxiliary = {
+					unitName: unitObject.unit.name,
+					count: highlightedAuxiliaries.length,
+					auxiliary: highlightedAuxiliaries[0]
+				}
+				newAuxiliaries.push(newAuxiliary)
+			}
+		}
+
+		selectedAuxiliaries = selectedAuxiliaries.concat(newAuxiliaries)
+
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
@@ -320,7 +375,7 @@ class EmpireContainer extends Component {
 						wmr_army_id: 1,
 						name: 'Halberdiers (The Empire)',
 						display_name: 'Halberdier unit',
-						plural_name: 'Halberdiers',
+						option_screen_name: 'Halberdiers',
 						singular_name: 'Halberdier',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
@@ -347,7 +402,7 @@ class EmpireContainer extends Component {
 						wmr_army_id: 1,
 						name: 'Crossbowmen (The Empire)',
 						display_name: 'Crossbowman unit',
-						plural_name: 'Crossbowmen',
+						option_screen_name: 'Crossbowmen',
 						singular_name: 'Crossbowman',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
@@ -374,7 +429,7 @@ class EmpireContainer extends Component {
 						wmr_army_id: 1,
 						name: 'General (The Empire)',
 						display_name: 'General',
-						adjective: 'General',
+						option_screen_name: 'the General',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,

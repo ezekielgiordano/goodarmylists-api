@@ -444,6 +444,10 @@ hr {
 	font-style: italic;
 }
 
+.auxiliary-entry-label-wmr {
+	cursor: crosshair;
+}
+
 .unit-option-selection-tile, .auxiliary-selection-tile {
 	text-align: center;
 	margin-left: auto;
