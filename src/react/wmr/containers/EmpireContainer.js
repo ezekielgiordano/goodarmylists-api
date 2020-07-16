@@ -174,7 +174,6 @@ class EmpireContainer extends Component {
 
 	addUnit(unitToAdd) {
 		let listedUnits = this.state.listedUnits
-		let indexCount = this.state.indexCount
 		let duplicateCount = 0
 		let i2
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
@@ -201,7 +200,6 @@ class EmpireContainer extends Component {
 
 	removeUnit(unitToRemove) {
 		let listedUnits = this.state.listedUnits
-		let listedUnitsTemporary = this.state.listedUnits
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let i2
 		let i3
@@ -254,9 +252,6 @@ class EmpireContainer extends Component {
 
 	addAuxiliary(unitObject, highlightedAuxiliaries) {
 		let selectedAuxiliaries = []
-		let newAuxiliaries = []
-		let newAuxiliary
-		let count = 1
 		let i2
 
 		for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
@@ -279,6 +274,7 @@ class EmpireContainer extends Component {
 	removeAuxiliary(auxiliaryToRemove) {
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let i2
+
 		for (i2 = selectedAuxiliaries.length - 1; i2 >= 0; i2--) {
 			if (
 				selectedAuxiliaries[i2].auxiliary.name === auxiliaryToRemove.auxiliary.name &&
@@ -291,6 +287,7 @@ class EmpireContainer extends Component {
 				}
 			}
 		}
+
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
@@ -299,7 +296,7 @@ class EmpireContainer extends Component {
 	}
 
 	addMagicItem() {
-
+console.log('YERRRRRAH')
 	}
 
 	removeMagicItem() {

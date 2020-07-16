@@ -1,5 +1,4 @@
 import style from '../../../assets/stylesheets/index.module.css'
-import paypal from '../../../assets/images/paypal.gif'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Select from 'react-select'
@@ -28,15 +27,9 @@ class WmrInnerContainer extends Component {
 			labeledArmy = { value: this.props.armies[i], label: this.props.armies[i].display_name }
 			armyOptions.push(labeledArmy)
 		}
-				let displayNoneBottom
-		if (selectedArmy === '') {
-			displayNoneBottom = style['display-none']
-		} else {
-			displayNoneBottom = ''
-		}
 		
 		let display
-		if (this.state.selectedArmy.display_name === 'The Empire') {
+		if (selectedArmy.display_name === 'The Empire') {
 			display =
 				<EmpireContainer 
 					selectedArmy={this.state.selectedArmy}
