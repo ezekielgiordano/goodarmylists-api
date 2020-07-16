@@ -4,8 +4,11 @@ import React from 'react'
 const MagicItemSelectionLabel = props => {
 	let extraSpace
 	if (parseInt(props.magicItem.points) < 10) {
-		extraSpace = <span className={style['hidden']}>{'_'}</span>
+		extraSpace = <span className={style['hidden']}>{'__'}</span>
 	}
+	if (parseInt(props.magicItem.points) >= 10 && parseInt(props.magicItem.points) < 100) {
+		extraSpace = <span className={style['hidden']}>{'_'}</span>
+	}	
 
 	let display
 	if (props.greyedOut === false) {

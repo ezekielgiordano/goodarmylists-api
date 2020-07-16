@@ -4,6 +4,9 @@ import React from 'react'
 const AuxiliarySelectionLabel = props => {
 	let extraSpace
 	if (parseInt(props.auxiliary.points) < 10) {
+		extraSpace = <span className={style['hidden']}>{'__'}</span>
+	}
+	if (parseInt(props.auxiliary.points) >= 10 && parseInt(props.auxiliary.points) < 100) {
 		extraSpace = <span className={style['hidden']}>{'_'}</span>
 	}
 
