@@ -8,30 +8,22 @@ const AuxiliarySelectionLabel = props => {
 	}
 
 	let className
-	let highlightingAction
 	if (props.highlighted === true) {
 		className = style['unit-option-selection-label-highlighted-unit-option']
-		if (props.unitObject.count > (props.duplicateAuxiliaryCount)) {
-			highlightingAction = 'add'				
-		} else {
-			highlightingAction = 'remove'
-		}
-	}
-	if (props.highlighted === false) {
+	} else {
 		className = style['unit-option-selection-label']
-		highlightingAction = 'add'
 	}
 
 	let pointDisplay
-	if (props.duplicateAuxiliaryCount >= 2) {
-		pointDisplay = props.auxiliary.points * props.duplicateAuxiliaryCount
+	if (props.count >= 2) {
+		pointDisplay = props.auxiliary.points * props.count
 	} else {
 		pointDisplay = props.auxiliary.points
 	}
 
 	let countDisplay
-	if (props.duplicateAuxiliaryCount > 0) {
-		countDisplay = `${props.duplicateAuxiliaryCount}x `
+	if (props.count > 0) {
+		countDisplay = `${props.count}x `
 	}
 
 	return (
@@ -42,10 +34,7 @@ const AuxiliarySelectionLabel = props => {
 			</div>
 			<div className={style['unit-option-label-div']}>
 				<span
-					onClick={() => props.updateHighlightedAuxiliaries(
-						props.auxiliary,
-						highlightingAction
-					)}				
+					onClick={() => props.updateHighlightedAuxiliaries(props.auxiliary)}				
 					className={className}
 					id={parseInt(props.auxiliary.id)}
 				>
