@@ -5,10 +5,10 @@ import React from 'react'
 
 const MagicItemIcon = props => {
 	let display
-	// if (
-	// 	props.no !== 'no' &&
-	// 	props.listedUnitsThatCanHaveMagicItems.includes(props.unitObject)
-	// ) {
+	if (
+		props.unitObject.unit.can_have_mag === true ||
+		props.unitObject.unit.can_have_mag === 't'
+	) {
 		display =
 			<span
 				onClick={() => props.updateUnitBeingGivenMagicItem(props.unitObject)}
@@ -16,12 +16,12 @@ const MagicItemIcon = props => {
 			>
 				<img src={vase} alt="" width={"20"} height={"12"} />
 			</span>		
-	// } else {
-	// 	display =
-	// 		<span className={style['removed-vase']}>
-	// 			<img src={white_square} alt="" width={"20"} height={"20"} />
-	// 		</span>
-	// }
+	} else {
+		display =
+			<span className={style['removed-vase']}>
+				<img src={white_square} alt="" width={"20"} height={"20"} />
+			</span>
+	}
 	
 	return (
 		<span>{display}</span>

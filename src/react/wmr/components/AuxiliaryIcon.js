@@ -5,7 +5,10 @@ import React from 'react'
 
 const AuxiliaryIcon = props => {
 	let display
-	// if () {
+	if (
+		props.unitObject.unit.can_have_aux === true ||
+		props.unitObject.unit.can_have_aux === 't'
+	) {
 		display =
 			<span
 				onClick={() => props.updateUnitBeingGivenAuxiliary(props.unitObject)}
@@ -13,9 +16,9 @@ const AuxiliaryIcon = props => {
 			>
 				<img src={cog} alt="" width={"20"} height={"20"} />
 			</span>	
-	// } else {
-	// 	display = <span className={style['removed-cog']}>{'_'}</span>
-	// }
+	} else {
+		display = <span className={style['removed-cog']}>{'_'}</span>
+	}
 
 	return (
 		<span>{display}</span>

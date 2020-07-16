@@ -11,86 +11,65 @@ class AuxiliarySelectionTile extends Component {
 		this.updateHighlightedAuxiliaries = this.updateHighlightedAuxiliaries.bind(this)
 	}
 
-	updateHighlightedAuxiliaries(auxiliary, highlightingAction) {
-		let selectedAuxiliaries = this.props.selectedAuxiliaries
+	updateHighlightedAuxiliaries(auxiliary) {
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
+		let auxiliaryObject
+		let duplicateCount = 0
+		let totalCount = 0
 		let i2
+		for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
+			if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
+				highlightedAuxiliaries[i2].count += 1
+				duplicateCount = highlightedAuxiliaries[i2].count
+			}
+		}
+		if (duplicateCount === 0) {
+			auxiliaryObject = {
+				unitName: this.props.unitObject.unit.name,
+				count: 1,
+				auxiliary: auxiliary
+			}
+			highlightedAuxiliaries.push(auxiliaryObject)			
+		} 
 
-
-
-		if (highlightingAction === 'remove') {
-			let newHighlightedAuxiliaries = []
-			for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
-				if (highlightedAuxiliaries[i2].name !== auxiliary.name) {
-					newHighlightedAuxiliaries.push(highlightedAuxiliaries[i2])
+		let allSeparateCounts = highlightedAuxiliaries.map(auxiliary => auxiliary.count)
+		for (i2 = 0; i2 < allSeparateCounts.length; i2++) {
+			totalCount += allSeparateCounts[i2]
+		}
+		if (totalCount > this.props.unitObject.count) { 
+			for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
+				if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
+					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 				}
 			}
-			highlightedAuxiliaries = newHighlightedAuxiliaries
 		}
-		if (highlightingAction === 'add') {
-			if (
-				 (
-					auxiliary.special_rules.includes('not independent') === false ||
-					auxiliary.special_rules.includes('not independent') === 'f'
-				)
-			) {
-				for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
-					if (
-						highlightedAuxiliaries.length >= this.props.unitObject.count && (
-							highlightedAuxiliaries[i2].special_rules.includes('not independent') === false ||
-							highlightedAuxiliaries[i2].special_rules.includes('not independent') === 'f'
-						)
-					) {
-						highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
-					}
-				}
-			}			
-			highlightedAuxiliaries.push(auxiliary)
-		}
-
-		let sortedHighlightedAuxiliaries = highlightedAuxiliaries.sort((a, b) => {
-			return ( parseInt(a.id) - parseInt(b.id) )
-		})
-		highlightedAuxiliaries = sortedHighlightedAuxiliaries
 
 		this.setState({	highlightedAuxiliaries: highlightedAuxiliaries })
 	}
 
 	render() {
 		let unitObject = this.props.unitObject
-		let auxiliaries = this.props.auxiliaries
+		let allAuxiliaries = this.props.auxiliaries
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
-		let nonMounts = []
-		let mounts = []
+		let unsortedAuxiliaries = []
 		let i2
 
-		for (i2 = 0; i2 < auxiliaries.length; i2++) {
-			if (auxiliaries[i2].used_by.includes(unitObject.unit.name)) {
-				if (
-					auxiliaries[i2].special_rules.includes('not independent') === false ||
-					auxiliaries[i2].special_rules.includes('not independent') === 'f'
-					) {
-					mounts.push(auxiliaries[i2])
-				} else {
-					nonMounts.push(auxiliaries[i2])
-				}
+		for (i2 = 0; i2 < allAuxiliaries.length; i2++) {
+			if (allAuxiliaries[i2].used_by.includes(unitObject.unit.name)) {
+				unsortedAuxiliaries.push(allAuxiliaries[i2])
 			}
 		}
-		let sortedMounts = mounts.sort((a, b) => {
+		let auxiliaries = unsortedAuxiliaries.sort((a, b) => {
 			return (parseInt(a.order_within_army) - parseInt(b.order_within_army))
 		})
-		let sortedNonMounts = nonMounts.sort((a, b) => {
-			return (parseInt(a.order_within_army) - parseInt(b.order_within_army))
-		})
-		
-		let mountDisplay = sortedMounts.map(auxiliary => {
-			let highlighted = false
-			let duplicateAuxiliaryCount = 0
 
+		let auxiliaryDisplay = auxiliaries.map(auxiliary => {
+			let highlighted = false
+			let count = 0
 			for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
-				if (highlightedAuxiliaries[i2].name === auxiliary.name) {
+				if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
 					highlighted = true
-					duplicateAuxiliaryCount += 1
+					count = highlightedAuxiliaries[i2].count
 				}
 			}
 
@@ -102,34 +81,11 @@ class AuxiliarySelectionTile extends Component {
 					unitObject={unitObject}
 					updateHighlightedAuxiliaries={this.updateHighlightedAuxiliaries}
 					highlighted={highlighted}
-					duplicateAuxiliaryCount={duplicateAuxiliaryCount}
+					count={count}
 				/>
 			)
 		})
 
-		let nonMountDisplay = sortedNonMounts.map(auxiliary => {
-			let highlighted = false
-			let duplicateAuxiliaryCount = 0
-
-			for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
-				if (highlightedAuxiliaries[i2].name === auxiliary.name) {
-					highlighted = true
-					duplicateAuxiliaryCount += 1
-				}
-			}
-
-			return (
-				<AuxiliarySelectionLabel
-					key={parseInt(auxiliary.id)}
-					id={parseInt(auxiliary.id)}
-					auxiliary={auxiliary}
-					unitObject={unitObject}
-					updateHighlightedAuxiliaries={this.updateHighlightedAuxiliaries}
-					highlighted={highlighted}
-					duplicateAuxiliaryCount={duplicateAuxiliaryCount}
-				/>
-			)
-		})
 		let question
 		if (unitObject.unit.unit_type === 'Hero' || unitObject.unit.unit_type === 'Wizard') {
 			if (unitObject.count > 1) {
@@ -147,8 +103,7 @@ class AuxiliarySelectionTile extends Component {
 					{question}
 				</h4><br />
 				<div className={style['unit-option-selections']}>
-					{nonMountDisplay}
-					{mountDisplay}<br /><br />
+					{auxiliaryDisplay}<br /><br />
 				</div>
 				<div>
 					<span 

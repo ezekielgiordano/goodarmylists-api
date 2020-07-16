@@ -155,13 +155,13 @@ class EmpireContainer extends Component {
 		return pointTotal		
 	}
 
-	calculateUnitCount(unitArray) {
-		let unitCount = 0
+	calculateUnitCount(array) {
+		let count = 0
 		let i2
-		for (i2 = 0; i2 < unitArray.length; i2++) {
-			unitCount += parseInt(unitArray[i2].count)
+		for (i2 = 0; i2 < array.length; i2++) {
+			count += array[i2].count
 		}
-		return unitCount
+		return count
 	}
 
 	calculateMinMaxes() {
@@ -190,12 +190,10 @@ class EmpireContainer extends Component {
 			}
 			listedUnits.push(unitToAddWithCount)
 		}
-		// let pointTotal = this.calculatePointTotal(listedUnits)
 		this.setState({
 			listedUnits: listedUnits,
 			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
-			unitCount: this.calculateUnitCount(listedUnits),
-			// maximumCount: this.calculateMinMaxes(pointTotal),
+			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -203,7 +201,11 @@ class EmpireContainer extends Component {
 
 	removeUnit(unitToRemove) {
 		let listedUnits = this.state.listedUnits
+		let listedUnitsTemporary = this.state.listedUnits
+		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let i2
+		let i3
+
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
 				if (
@@ -222,17 +224,29 @@ class EmpireContainer extends Component {
 					if (listedUnits[i2].count > 1) {
 						listedUnits[i2].count -= 1
 					} else {
+						for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
+							if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
+								selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
+							}
+						}
 						listedUnits.splice(listedUnits.indexOf(listedUnits[i2]), 1)
+					}
+				}
+			}
+			for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
+				if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
+					if (selectedAuxiliaries[i3].count > listedUnits[i2].count) {
+						selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
 					}
 				}
 			}
 		}
 
-
 		this.setState({
 			listedUnits: listedUnits,
+			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
-			unitCount: this.calculateUnitCount(listedUnits),
+			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -240,6 +254,9 @@ class EmpireContainer extends Component {
 
 	addAuxiliary(unitObject, highlightedAuxiliaries) {
 		let selectedAuxiliaries = []
+		let newAuxiliaries = []
+		let newAuxiliary
+		let count = 1
 		let i2
 
 		for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
@@ -248,70 +265,37 @@ class EmpireContainer extends Component {
 			}
 		}
 
-		let checkIfAllTheSame = array => {
-    		let first = array[0]
-    		return array.every(element => {
-        		return element === first
-    		})
-		}
-
-		let newAuxiliaries = []
-		let newAuxiliary
-		let count = 1
-		if (highlightedAuxiliaries.length > 0) {
-			if (checkIfAllTheSame(highlightedAuxiliaries) === false) {
-
-
-
-				for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
-					if (count === 1) {
-						newAuxiliary = {
-							unitName: unitObject.unit.name,
-							count: count,
-							auxiliary: highlightedAuxiliaries[i2]
-						}
-						count += 1
-					} else {
-						if (highlightedAuxiliaries[i2].name === newAuxiliary.auxiliary.name) {
-							newAuxiliary.count += 1
-							// if (i2 + 1 === highlightedAuxiliaries.length) {
-							// 	newAuxiliaries.push(newAuxiliary)
-							// }
-						} else {
-							newAuxiliaries.push(newAuxiliary)
-							count = 1					
-						}
-					}
-
-
-				}
-				newAuxiliary.count += 1
-				newAuxiliaries.push(newAuxiliary)
-
-
-
-			} else {
-				newAuxiliary = {
-					unitName: unitObject.unit.name,
-					count: highlightedAuxiliaries.length,
-					auxiliary: highlightedAuxiliaries[0]
-				}
-				newAuxiliaries.push(newAuxiliary)
-			}
-		}
-
-		selectedAuxiliaries = selectedAuxiliaries.concat(newAuxiliaries)
+		selectedAuxiliaries = selectedAuxiliaries.concat(highlightedAuxiliaries)
 
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
+			unitCount: this.calculateUnitCount(this.state.listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
 	}
 
-	removeAuxiliary() {
-
+	removeAuxiliary(auxiliaryToRemove) {
+		let selectedAuxiliaries = this.state.selectedAuxiliaries
+		let i2
+		for (i2 = selectedAuxiliaries.length - 1; i2 >= 0; i2--) {
+			if (
+				selectedAuxiliaries[i2].auxiliary.name === auxiliaryToRemove.auxiliary.name &&
+				selectedAuxiliaries[i2].unitName === auxiliaryToRemove.unitName
+			) {
+				if (auxiliaryToRemove.count > 1) {
+					selectedAuxiliaries[i2].count -= 1
+				} else {
+					selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(auxiliaryToRemove), 1)
+				}
+			}
+		}
+		this.setState({
+			selectedAuxiliaries: selectedAuxiliaries,
+			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
+			unitCount: this.calculateUnitCount(this.state.listedUnits) + this.calculateUnitCount(selectedAuxiliaries)
+		})
 	}
 
 	addMagicItem() {
