@@ -100,7 +100,7 @@ class AuxiliarySelectionTile extends Component {
 			if (unitObject.count > 1) {
 				question = `What option(s) will be given to ${unitObject.unit.option_screen_name}?`
 			} else {
-				question = `What option(s) will be given to ${unitObject.unit.singular_name}?`
+				question = `What option(s) will be given to the ${unitObject.unit.list_name}?`
 			}
 		} else {
 			question = `What option(s) will be given to ${unitObject.unit.option_screen_name}?`
