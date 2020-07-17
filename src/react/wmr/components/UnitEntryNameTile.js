@@ -19,7 +19,7 @@ const UnitEntryNameTile = props => {
 						className={style['auxiliary-entry-label-wmr']}
 						onClick={() => props.removeAuxiliary(auxiliaryObject)}
 					>
-						{' -- '}{auxiliaryObject.count}{'x '}{auxiliaryObject.auxiliary.display_name}
+						{auxiliaryObject.count}{'x '}{auxiliaryObject.auxiliary.display_name}
 					</span>
 				</div>				
 			)
@@ -57,7 +57,7 @@ const UnitEntryNameTile = props => {
 						className={style['unit-option-entry-label']}
 						onClick={() => props.removeMagicItem(magicItemObject)}
 					>
-						{' -- '}{magicItemObject.count}{'x '}{magicItemObject.magicItem.display_name}
+						{magicItemObject.count}{'x '}{magicItemObject.magicItem.display_name}
 					</span>
 				</div>
 
@@ -72,7 +72,7 @@ const UnitEntryNameTile = props => {
 						className={style['unit-option-entry-label']}
 						onClick={() => props.removeMagicItem(magicItemObject)}
 					>
-						{' -- '}{magicItemObject.count}{'x '}{magicItemObject.magicItem.display_name}
+						{magicItemObject.count}{'x '}{magicItemObject.magicItem.display_name}
 					</span>
 				</div>
 
@@ -87,7 +87,7 @@ const UnitEntryNameTile = props => {
 						className={style['unit-option-entry-label']}
 						onClick={() => props.removeMagicItem(magicItemObject)}
 					>
-						{' -- '}{magicItemObject.count}{'x '}{magicItemObject.magicItem.display_name}
+						{magicItemObject.count}{'x '}{magicItemObject.magicItem.display_name}
 					</span>
 				</div>
 
