@@ -7,12 +7,12 @@ const UnitEntryButton = props => {
 		extraSpace = <span className={style['hidden']}>{'_'}</span>
 	}
 	let greyedOut = false
-	// let i
-	// for (i = 0; i < props.greyedOutUnits.length; i++) {
-	// 	if (parseInt(props.greyedOutUnits[i].id) === parseInt(props.unit.id)) {
-	// 		greyedOut = true
-	// 	}
-	// }
+	let i2
+	for (i2 = 0; i2 < props.greyedOutUnits.length; i2++) {
+		if (props.greyedOutUnits[i2].name === props.unit.name) {
+			greyedOut = true
+		}
+	}
 
 	let display
 	if (greyedOut === false) {

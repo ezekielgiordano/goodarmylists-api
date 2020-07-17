@@ -36,6 +36,15 @@ class AuxiliarySelectionTile extends Component {
 		for (i2 = 0; i2 < allSeparateCounts.length; i2++) {
 			totalCount += allSeparateCounts[i2]
 		}
+		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
+			if (
+				highlightedAuxiliaries[i2].count > 1 &&
+				highlightedAuxiliaries[i2].auxiliary.special_rules.includes('no matter how large, can have no more than one')
+			) {
+				highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
+			}
+
+		}
 		if (totalCount > this.props.unitObject.count) { 
 			for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
 				if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
@@ -77,8 +86,8 @@ class AuxiliarySelectionTile extends Component {
 				<AuxiliarySelectionLabel
 					key={parseInt(auxiliary.id) + 20000}
 					id={parseInt(auxiliary.id)}
-					auxiliary={auxiliary}
 					unitObject={unitObject}
+					auxiliary={auxiliary}
 					updateHighlightedAuxiliaries={this.updateHighlightedAuxiliaries}
 					highlighted={highlighted}
 					count={count}
