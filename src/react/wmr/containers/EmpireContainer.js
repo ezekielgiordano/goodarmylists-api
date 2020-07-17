@@ -155,7 +155,7 @@ class EmpireContainer extends Component {
 				pointTotal += parseInt(this.state.selectedMagicItems[i2].magicItem.points)
 			}
 		}
-		return pointTotal		
+		return pointTotal
 	}
 
 	calculateUnitCount(array) {
@@ -202,35 +202,77 @@ class EmpireContainer extends Component {
 		let unitsInArmy = []
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
-		let maximumCount = this.calculateMaximumCount(pointTotal)
+		let wouldBeMaximumCount = 0
+		let halberdierCount = 0
+		let crossbowmanCount = 0
+		let handgunnerCount = 0
+		let handgunnerOrMax = 0
+		let handgunnerOrMaxOrZero = 0
 		let locked = false
 		let i2
 		let i3
+
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			if (unitArray[i2].unit.name === 'Halberdiers (The Empire)') {
+				halberdierCount += unitArray[i2].count
+			}	
+			if (unitArray[i2].unit.name === 'Crossbowmen (The Empire)') {
+				crossbowmanCount += unitArray[i2].count
+			}			
+			if (unitArray[i2].unit.name === 'Handgunners (The Empire)') {
+				handgunnerCount += unitArray[i2].count
+			}
+		}	
 
 		for (i2 = 0; i2 < this.props.units.length; i2++) {
 			if (this.props.units[i2].wmr_army_id === this.props.selectedArmy.id) {
 				unitsInArmy.push(this.props.units[i2])
 			}
 		}
-
 		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
+			wouldBeMaximumCount = this.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
+
+			if (handgunnerCount > wouldBeMaximumCount) {
+				handgunnerOrMax = wouldBeMaximumCount
+			} else {
+				handgunnerOrMax = handgunnerCount
+			}
+			if (handgunnerCount === 0) {
+				handgunnerOrMaxOrZero = 0
+			} else {
+				handgunnerOrMaxOrZero = handgunnerOrMax
+			}	
+
 			for (i3 = 0; i3 < unitArray.length; i3++) {
 				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
-					if (unitArray[i3].unit.is_unique === true || unitArray[i3].unit.is_unique === 't') {
+					if (unitsInArmy[i2].is_unique === true || unitsInArmy[i2].is_unique === 't') {
 						locked = true
 					}
 					if (
-						unitArray[i3].count >= maximumCount &&
-						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * maximumCount
+						unitArray[i3].count >= wouldBeMaximumCount &&
+						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * wouldBeMaximumCount
 					) {
 						locked = true
 					}
-					if (locked === true) {
-						greyedOutUnits.push(unitArray[i3].unit)
-					}
-					locked = false
 				}
 			}
+
+			if (
+				halberdierCount < wouldBeMaximumCount * 2 ||
+				crossbowmanCount + handgunnerOrMaxOrZero < wouldBeMaximumCount * 2
+			) {
+				locked = true
+			}
+			if (
+				unitsInArmy[i2].name === 'Halberdiers (The Empire)' ||
+				unitsInArmy[i2].name === 'Crossbowmen (The Empire)'
+			) {
+				locked = false
+			}
+			if (locked === true) {
+				greyedOutUnits.push(unitsInArmy[i2])
+			}
+			locked = false
 		}
 
 		return greyedOutUnits
@@ -266,16 +308,48 @@ class EmpireContainer extends Component {
 	removeUnit(unitToRemove) {
 		let listedUnits = this.state.listedUnits
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
+		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
+		let wouldBeMaximumCount = this.calculateMaximumCount(wouldBePointTotal)
+		let halberdierCount = 0
+		let crossbowmanCount = 0
+		let handgunnerCount = 0
+		let handgunnerOrMax = 0
+		let handgunnerOrMaxOrZero = 0
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
+			if (listedUnits[i2].unit.name === 'Halberdiers (The Empire)') {
+				halberdierCount += listedUnits[i2].count
+			}	
+			if (listedUnits[i2].unit.name === 'Crossbowmen (The Empire)') {
+				crossbowmanCount += listedUnits[i2].count
+			}			
+			if (listedUnits[i2].unit.name === 'Handgunners (The Empire)') {
+				handgunnerCount += listedUnits[i2].count
+			}
+		}
+		if (handgunnerCount > wouldBeMaximumCount) {
+			handgunnerOrMax = wouldBeMaximumCount
+		} else {
+			handgunnerOrMax = handgunnerCount
+		}
+		if (handgunnerCount === 0) {
+			handgunnerOrMaxOrZero = 0
+		} else {
+			handgunnerOrMaxOrZero = handgunnerOrMax
+		}
+
+		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
-				if (
-					unitToRemove.unit.name === 'Halberdiers (The Empire)' ||
-					unitToRemove.unit.name === 'Crossbowmen (The Empire)'
-				) {
-					if (listedUnits[i2].count > 2) {
+				if (unitToRemove.unit.name === 'Halberdiers (The Empire)') {
+					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
+						listedUnits[i2].count -= 1
+					}
+				}
+				if (unitToRemove.unit.name === 'Crossbowmen (The Empire)') {
+
+					if (listedUnits[i2].count + handgunnerOrMax - 1 >= wouldBeMaximumCount * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
@@ -284,15 +358,20 @@ class EmpireContainer extends Component {
 					unitToRemove.unit.name !== 'Crossbowmen (The Empire)' &&
 					unitToRemove.unit.unit_type !== 'General'
 				) {
-					if (listedUnits[i2].count > 1) {
-						listedUnits[i2].count -= 1
-					} else {
-						for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
-							if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
-								selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
+					if (
+						halberdierCount >= wouldBeMaximumCount * 2 &&
+						crossbowmanCount + handgunnerOrMaxOrZero >= wouldBeMaximumCount * 2
+					) {
+						if (listedUnits[i2].count > 1) {
+							listedUnits[i2].count -= 1
+						} else {
+							for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
+								if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
+									selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
+								}
 							}
+							listedUnits.splice(listedUnits.indexOf(listedUnits[i2]), 1)
 						}
-						listedUnits.splice(listedUnits.indexOf(listedUnits[i2]), 1)
 					}
 				}
 			}
