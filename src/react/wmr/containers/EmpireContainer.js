@@ -106,7 +106,7 @@ class EmpireContainer extends Component {
 			unitBeingGivenMagicItem: ''
 		}
 		this.calculatePointTotal = this.calculatePointTotal.bind(this)
-		this.calculateMinMaxes = this.calculateMinMaxes.bind(this)
+		this.calculateMaximumCount = this.calculateMaximumCount.bind(this)
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
@@ -136,11 +136,11 @@ class EmpireContainer extends Component {
 		}
 		if (auxiliaryArray !== 'placeholder') {
 			for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points * auxiliaryArray[i2].count)
+				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points) * auxiliaryArray[i2].count
 			}			
 		} else {
 			for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
-				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].auxiliary.points)
+				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].auxiliary.points) * this.state.selectedAuxiliaries[i2].count
 			}			
 		}
 		if (magicItemArray !== 'placeholder') {
@@ -164,12 +164,53 @@ class EmpireContainer extends Component {
 		return count
 	}
 
-	calculateMinMaxes() {
-
+	calculateMaximumCount(pointTotal) {
+		let maximumCount
+		if (pointTotal < 2000) {
+			maximumCount = 1
+		} else {
+			let calculation = (pointTotal / 1000).toFixed(20)
+			maximumCount = Math.floor(calculation)
+		}
+		return maximumCount
 	}
 
-	determineIfGreyedOut() {
+	determineIfGreyedOut(unitArray) {
+		let unitsInArmy = []
+		let greyedOutUnits = []
+		let pointTotal = this.state.pointTotal
+		let maximumCount = this.calculateMaximumCount(pointTotal)
+		let locked = false
+		let i2
+		let i3
 
+		for (i2 = 0; i2 < this.props.units.length; i2++) {
+			if (this.props.units[i2].wmr_army_id === this.props.selectedArmy.id) {
+				unitsInArmy.push(this.props.units[i2])
+			}
+		}
+
+		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
+			for (i3 = 0; i3 < unitArray.length; i3++) {
+				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
+					if (unitArray[i3].unit.is_unique === true || unitArray[i3].unit.is_unique === 't') {
+						locked = true
+					}
+					if (
+						unitArray[i3].count >= maximumCount &&
+						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * maximumCount
+					) {
+						locked = true
+					}
+					if (locked === true) {
+						greyedOutUnits.push(unitArray[i3].unit)
+					}
+					locked = false
+				}
+			}
+		}
+
+		return greyedOutUnits
 	}
 
 	addUnit(unitToAdd) {
@@ -180,14 +221,15 @@ class EmpireContainer extends Component {
 			if (listedUnits[i2].unit.name === unitToAdd.name) {
 				listedUnits[i2].count += 1
 				duplicateCount += 1
+
 			}
 		}
 		if (duplicateCount === 0) {
-			let unitToAddWithCount = {
+			let unitObject = {
 				count: 1,
 				unit: unitToAdd
 			}
-			listedUnits.push(unitToAddWithCount)
+			listedUnits.push(unitObject)
 		}
 		this.setState({
 			listedUnits: listedUnits,
@@ -232,7 +274,10 @@ class EmpireContainer extends Component {
 				}
 			}
 			for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
-				if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
+				if (
+					selectedAuxiliaries[i3].unitName === unitToRemove.unit.name &&
+					listedUnits.length !== this.state.listedUnits.length
+				) {
 					if (selectedAuxiliaries[i3].count > listedUnits[i2].count) {
 						selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
 					}
@@ -243,7 +288,7 @@ class EmpireContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
+			pointTotal: this.calculatePointTotal(listedUnits, selectedAuxiliaries, 'placeholder'),
 			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
@@ -283,7 +328,7 @@ class EmpireContainer extends Component {
 				if (auxiliaryToRemove.count > 1) {
 					selectedAuxiliaries[i2].count -= 1
 				} else {
-					selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(auxiliaryToRemove), 1)
+					selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i2]), 1)
 				}
 			}
 		}
@@ -295,12 +340,59 @@ class EmpireContainer extends Component {
 		})
 	}
 
-	addMagicItem() {
-console.log('YERRRRRAH')
+	addMagicItem(unitObject, highlightedMagicItems) {
+		let selectedMagicItems = []
+		let i2
+		let i3
+
+		for (i2 = 0; i2 < this.state.selectedMagicItems.length; i2++) {
+			if (this.state.selectedMagicItems[i2].unitName !== unitObject.unit.name) {
+				selectedMagicItems.push(this.state.selectedMagicItems[i2])
+			}
+		}
+
+		selectedMagicItems = selectedMagicItems.concat(highlightedMagicItems)
+
+		for (i2 = selectedMagicItems.length - 1; i2 >= 0; i2--) {
+			for (i3 = highlightedMagicItems.length - 1; i3 >= 0; i3--) {
+				if (
+					selectedMagicItems[i2].magicItem.name === highlightedMagicItems[i3].magicItem.name &&
+					selectedMagicItems[i2].unitName !== unitObject.unit.name
+				) {
+					selectedMagicItems.splice(selectedMagicItems.indexOf(selectedMagicItems[i2]), 1)
+				}
+			}
+		}
+
+		this.setState({
+			selectedMagicItems: selectedMagicItems,
+			pointTotal: this.calculatePointTotal('placeholder', 'placeholder', selectedMagicItems),
+			unitBeingGivenMagicItem: ''
+		})
+		this.toggleMagicItems()
 	}
 
-	removeMagicItem() {
+	removeMagicItem(magicItemToRemove) {
+		let selectedMagicItems = this.state.selectedMagicItems
+		let i2
 
+		for (i2 = selectedMagicItems.length - 1; i2 >= 0; i2--) {
+			if (
+				selectedMagicItems[i2].magicItem.name === magicItemToRemove.magicItem.name &&
+				selectedMagicItems[i2].unitName === magicItemToRemove.unitName
+			) {
+				if (magicItemToRemove.count > 1) {
+					selectedMagicItems[i2].count -= 1
+				} else {
+					selectedMagicItems.splice(selectedMagicItems.indexOf(magicItemToRemove), 1)
+				}
+			}
+		}
+
+		this.setState({
+			selectedMagicItems: selectedMagicItems,
+			pointTotal: this.calculatePointTotal('placeholder', 'placeholder', selectedMagicItems)
+		})
 	}
 
 	toggleFormattedList() {
@@ -469,6 +561,7 @@ console.log('YERRRRRAH')
 					<MagicItemSelectionTile
 						unitObject={this.state.unitBeingGivenMagicItem}
 						magicItems={this.props.magicItems}
+						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
@@ -497,6 +590,8 @@ console.log('YERRRRRAH')
 			return ( parseInt(a.order_within_army) - parseInt(b.order_within_army) )
 		})
 
+		let greyedOutUnits = this.determineIfGreyedOut(this.state.listedUnits)
+
 		let	unitEntryButtonDisplay = unitsInArmy.map(unit => {
 			return (
 				<UnitEntryButton
@@ -504,6 +599,7 @@ console.log('YERRRRRAH')
 					id={parseInt(unit.id)}
 					unit={unit}
 					addUnit={this.addUnit}
+					greyedOutUnits={greyedOutUnits}
 				/>
 			)			
 		})

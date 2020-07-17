@@ -8,42 +8,36 @@ const MagicItemSelectionLabel = props => {
 	}
 	if (parseInt(props.magicItem.points) >= 10 && parseInt(props.magicItem.points) < 100) {
 		extraSpace = <span className={style['hidden']}>{'_'}</span>
-	}	
+	}
 
-	let display
-	if (props.greyedOut === false) {
-		display =
-			<div className={style['unit-option-selection-tile-row']}>
-				<div className={style['unit-option-label-div']}>
-					{extraSpace}
-					<span className={style['magic-item-points-label-wmr']}>{parseInt(props.magicItem.points)}</span>
-				</div>
-				<div className={style['unit-option-label-div']}>
-					<span
-						onClick={() => props.selectMagicItem(props.unitObject, props.magicItem)}
-						className={style['unit-option-selection-label']}
-					>
-						{props.magicItem.display_name}
-					</span>
-				</div>
-			</div>
+	let className
+	if (props.highlighted === true) {
+		className = style['unit-option-selection-label-highlighted-unit-option']
 	} else {
-		display =
-			<div className={style['unit-option-selection-tile-row-greyed-out']}>
-				<div className={style['unit-option-label-div']}>
-					{extraSpace}
-					<span>{parseInt(props.magicItem.points)}</span>
-				</div>
-				<div className={style['unit-option-label-div']}>
-					<span>
-						{props.magicItem.display_name}
-					</span>
-				</div>
-			</div>	
+		className = style['unit-option-selection-label']
+	}
+
+	let countDisplay
+	if (props.count > 0) {
+		countDisplay = `${props.count}x `
 	}
 
 	return (
-		<div>{display}</div>
+		<div className={style['unit-option-selection-tile-row']} id={parseInt(props.magicItem.id)}>
+			<div className={style['unit-option-label-div']}>
+				{extraSpace}
+				<span className={style['magic-item-points-label-wmr']}>{props.magicItem.points}</span>
+			</div>
+			<div className={style['unit-option-label-div']}>
+				<span
+					onClick={() => props.updateHighlightedMagicItems(props.magicItem)}				
+					className={className}
+					id={parseInt(props.magicItem.id)}
+				>
+					{countDisplay}{props.magicItem.display_name}
+				</span>
+			</div>
+		</div>
 	)
 }
 

@@ -33,14 +33,16 @@ const UnitEntryNameTile = props => {
 	let magicStandards = []
 	let devicesOfPower = []
 	for (i2 = 0; i2 < allSelectedMagicItems.length; i2++) {
-		if (allSelectedMagicItems[i2].magicItem.magic_item_type === 'Magic Weapon') {
-			magicWeapons.push(allSelectedMagicItems[i2])
-		}
-		if (allSelectedMagicItems[i2].magicItem.magic_item_type === 'Magic Standard') {
-			magicStandards.push(allSelectedMagicItems[i2])
-		}
-		if (allSelectedMagicItems[i2].magicItem.magic_item_type === 'Device of Power') {
-			devicesOfPower.push(allSelectedMagicItems[i2])
+		if (allSelectedMagicItems[i2].unitName === props.unitObject.unit.name) {
+			if (allSelectedMagicItems[i2].magicItem.magic_item_type === 'Magic Weapon') {
+				magicWeapons.push(allSelectedMagicItems[i2])
+			}
+			if (allSelectedMagicItems[i2].magicItem.magic_item_type === 'Magic Standard') {
+				magicStandards.push(allSelectedMagicItems[i2])
+			}
+			if (allSelectedMagicItems[i2].magicItem.magic_item_type === 'Device of Power') {
+				devicesOfPower.push(allSelectedMagicItems[i2])
+			}
 		}
 	}
 
