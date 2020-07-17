@@ -446,6 +446,7 @@ hr {
 
 .auxiliary-entry-label-wmr {
 	cursor: crosshair;
+	font-style: italic;
 }
 
 .unit-option-selection-tile, .auxiliary-selection-tile {

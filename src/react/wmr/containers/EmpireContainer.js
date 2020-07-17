@@ -1,8 +1,8 @@
 import style from '../../../assets/stylesheets/index.module.css'
 import paypal from '../../../assets/images/paypal.gif'
 import React, { Component } from 'react'
-// import Modal from 'react-modal'
-// import FormattedList from '../components/FormattedList'
+import Modal from 'react-modal'
+import FormattedList from '../components/FormattedList'
 import UnitEntryButton from '../components/UnitEntryButton'
 import UnitEntryNameTile from '../components/UnitEntryNameTile'
 import AuxiliaryIcon from '../components/AuxiliaryIcon'
@@ -106,6 +106,8 @@ class EmpireContainer extends Component {
 			unitBeingGivenMagicItem: ''
 		}
 		this.calculatePointTotal = this.calculatePointTotal.bind(this)
+		this.calculateUnitCount = this.calculateUnitCount.bind(this)
+		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
 		this.calculateMaximumCount = this.calculateMaximumCount.bind(this)
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
 		this.addUnit = this.addUnit.bind(this)
@@ -162,6 +164,26 @@ class EmpireContainer extends Component {
 			count += array[i2].count
 		}
 		return count
+	}
+
+	calculateBreakPoint(unitArray, auxiliaryArray) {
+		let breakPoint = 0
+		let i2
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			if (
+				unitArray[i2].unit.unit_type !== 'General' &&
+				unitArray[i2].unit.unit_type !== 'Hero' &&
+				unitArray[i2].unit.unit_type !== 'Wizard'
+			) {
+				breakPoint += unitArray[i2].count
+			}
+		}
+		for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
+			if (auxiliaryArray[i2].auxiliary.special_rules.includes('not independent')) {
+				breakPoint += auxiliaryArray[i2].count
+			}
+		}
+		return breakPoint
 	}
 
 	calculateMaximumCount(pointTotal) {
@@ -604,10 +626,12 @@ class EmpireContainer extends Component {
 			)			
 		})
 
+		let breakPoint = this.calculateBreakPoint(listedUnits, this.state.selectedAuxiliaries)
 		let pointTotalDisplay =
 			<div className={style['point-total']}>
 				Points: <span className={style['bold']}>{this.state.pointTotal}</span><br />
 				Unit Count: <span className={style['bold']}>{this.state.unitCount}</span><br />
+				Break Point: <span className={style['bold']}>{breakPoint}</span><br />
 			</div>
 
 		let listedUnitTileDisplay = listedUnits.map(unitObject => {
@@ -707,6 +731,25 @@ class EmpireContainer extends Component {
 						<img alt="" border="0" src={paypal} width="1" height="1" />
 					</form>
 				</div>
+				<Modal
+					appElement={appElement}
+					isOpen={this.state.formattedListVisible}
+					onRequestClose={this.toggleFormattedList}
+					shouldCloseOnOverlayClick={true}
+					className={style['formatted-list-modal']}
+					ariaHideApp={false}
+				>
+					<FormattedList
+						selectedArmy={this.props.selectedArmy}
+						listedUnits={listedUnits}
+						selectedAuxiliaries={this.state.selectedAuxiliaries}
+						selectedMagicItems={this.state.selectedMagicItems}
+						pointTotal={this.state.pointTotal}
+						unitCount={this.state.unitCount}
+						breakPoint={breakPoint}
+						toggleFormattedList={this.toggleFormattedList}
+					/>
+				</Modal>				
 			</div>	
 		)
 	}
