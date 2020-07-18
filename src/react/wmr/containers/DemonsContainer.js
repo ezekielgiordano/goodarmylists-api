@@ -21,22 +21,22 @@ class DemonsContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 3,
-						name: 'Chaos Warriors (Chaos)',
-						display_name: 'Chaos Warrior unit',
-						option_screen_name: 'Chaos Warriors',
-						list_name: 'Chaos Warriors',
+						wmr_army_id: 2,
+						name: 'Skeletons (Tomb Kings)',
+						display_name: 'Skeleton unit',
+						option_screen_name: 'Skeletons',
+						list_name: 'Skeletons',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '4',
-						hits: '4',
-						armor: '4+',
+						attacks: '2',
+						hits: '3',
+						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 140,
-						minimum: 1,
+						points: 30,
+						minimum: 2,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -48,22 +48,22 @@ class DemonsContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 3,
-						name: 'Chaos Marauders (Chaos)',
-						display_name: 'Chaos Marauder unit',
-						option_screen_name: 'Chaos Marauders',
-						list_name: 'Chaos Marauders',
+						wmr_army_id: 2,
+						name: 'Skeleton Bowmen (Tomb Kings)',
+						display_name: 'Skeleton Bowman unit',
+						option_screen_name: 'Skeleton Bowmen',
+						list_name: 'Skeleton Bowmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 2,
-						attacks: '3',
+						attacks: '2/1',
 						hits: '3',
-						armor: '5+',
+						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 60,
-						minimum: 1,
+						points: 45,
+						minimum: 2,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -75,24 +75,24 @@ class DemonsContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 3,
-						name: 'General (Chaos)',
-						display_name: 'General',
-						option_screen_name: 'the General',
-						list_name: 'General',
+						wmr_army_id: 2,
+						name: 'Tomb King (Tomb Kings)',
+						display_name: 'Tomb King',
+						option_screen_name: 'the Tomb King',
+						list_name: 'Tomb King',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 12,
+						order_within_army: 10,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 125,
+						points: 130,
 						minimum: 1,
 						maximum: 1,
-						special_rules: '-',
+						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -100,8 +100,8 @@ class DemonsContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 0,
-			unitCount: 0,
+			pointTotal: 280,
+			unitCount: 5,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -110,10 +110,6 @@ class DemonsContainer extends Component {
 			unitBeingGivenAuxiliary: '',
 			unitBeingGivenMagicItem: ''
 		}
-		this.calculatePointTotal = this.calculatePointTotal.bind(this)
-		this.calculateUnitCount = this.calculateUnitCount.bind(this)
-		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
-		this.calculateMaximumCount = this.calculateMaximumCount.bind(this)
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
@@ -131,79 +127,6 @@ class DemonsContainer extends Component {
 		this.clearList = this.clearList.bind(this)
 	}
 
-	calculatePointTotal(unitArray, auxiliaryArray, magicItemArray) {
-		let pointTotal = 0
-		let i2
-		if (unitArray !== 'placeholder') {
-			for (i2 = 0; i2 < unitArray.length; i2++) {
-				pointTotal += (parseInt(unitArray[i2].unit.points) * parseInt(unitArray[i2].count))
-			}
-		} else {
-			for (i2 = 0; i2 < this.state.listedUnits.length; i2++) {
-				pointTotal += (parseInt(this.state.listedUnits[i2].unit.points) * parseInt(this.state.listedUnits[i2].count))
-			}			
-		}
-		if (auxiliaryArray !== 'placeholder') {
-			for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points) * auxiliaryArray[i2].count
-			}			
-		} else {
-			for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
-				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].auxiliary.points) * this.state.selectedAuxiliaries[i2].count
-			}			
-		}
-		if (magicItemArray !== 'placeholder') {
-			for (i2 = 0; i2 < magicItemArray.length; i2++) {
-				pointTotal += parseInt(magicItemArray[i2].magicItem.points)
-			}			
-		} else {
-			for (i2 = 0; i2 < this.state.selectedMagicItems.length; i2++) {
-				pointTotal += parseInt(this.state.selectedMagicItems[i2].magicItem.points)
-			}
-		}
-		return pointTotal
-	}
-
-	calculateUnitCount(array) {
-		let count = 0
-		let i2
-		for (i2 = 0; i2 < array.length; i2++) {
-			count += array[i2].count
-		}
-		return count
-	}
-
-	calculateBreakPoint(unitArray, auxiliaryArray) {
-		let breakPoint = 0
-		let i2
-		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (
-				unitArray[i2].unit.unit_type !== 'General' &&
-				unitArray[i2].unit.unit_type !== 'Hero' &&
-				unitArray[i2].unit.unit_type !== 'Wizard'
-			) {
-				breakPoint += unitArray[i2].count
-			}
-		}
-		for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-			if (auxiliaryArray[i2].auxiliary.special_rules.includes('not independent')) {
-				breakPoint += auxiliaryArray[i2].count
-			}
-		}
-		return breakPoint
-	}
-
-	calculateMaximumCount(pointTotal) {
-		let maximumCount
-		if (pointTotal < 2000) {
-			maximumCount = 1
-		} else {
-			let calculation = (pointTotal / 1000).toFixed(20)
-			maximumCount = Math.floor(calculation)
-		}
-		return maximumCount
-	}
-
 	determineIfGreyedOut(unitArray) {
 		let unitsInArmy = []
 		let greyedOutUnits = []
@@ -215,7 +138,54 @@ class DemonsContainer extends Component {
 		let i2
 		let i3
 
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			if (unitArray[i2].unit.name === 'Skeletons (Tomb Kings)') {
+				skeletonCount += unitArray[i2].count
+			}	
+			if (unitArray[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
+				skeletonBowmanCount += unitArray[i2].count
+			}			
+		}	
 
+		for (i2 = 0; i2 < this.props.units.length; i2++) {
+			if (this.props.units[i2].wmr_army_id === this.props.selectedArmy.id) {
+				unitsInArmy.push(this.props.units[i2])
+			}
+		}
+		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
+			wouldBeMaximumCount = this.props.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
+
+			for (i3 = 0; i3 < unitArray.length; i3++) {
+				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
+					if (unitsInArmy[i2].is_unique === true || unitsInArmy[i2].is_unique === 't') {
+						locked = true
+					}
+					if (
+						unitArray[i3].count >= wouldBeMaximumCount &&
+						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * wouldBeMaximumCount
+					) {
+						locked = true
+					}
+				}
+			}
+
+			if (
+				skeletonCount < wouldBeMaximumCount * 2 ||
+				skeletonBowmanCount < wouldBeMaximumCount * 2
+			) {
+				locked = true
+			}
+			if (
+				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
+				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
+			) {
+				locked = false
+			}
+			if (locked === true) {
+				greyedOutUnits.push(unitsInArmy[i2])
+			}
+			locked = false
+		}
 
 		return greyedOutUnits
 	}
@@ -239,8 +209,8 @@ class DemonsContainer extends Component {
 		}
 		this.setState({
 			listedUnits: listedUnits,
-			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
-			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(this.state.selectedAuxiliaries),
+			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -250,15 +220,70 @@ class DemonsContainer extends Component {
 		let listedUnits = this.state.listedUnits
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
-		let wouldBeMaximumCount = this.calculateMaximumCount(wouldBePointTotal)
+		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
+		let skeletonCount = 0
+		let skeletonBowmanCount = 0
+		let i2
+		let i3
 
+		for (i2 = 0; i2 < listedUnits.length; i2++) {
+			if (listedUnits[i2].unit.name === 'Skeletons (Tomb Kings)') {
+				skeletonCount += listedUnits[i2].count
+			}	
+			if (listedUnits[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
+				skeletonBowmanCount += listedUnits[i2].count
+			}			
+		}
 
+		for (i2 = 0; i2 < listedUnits.length; i2++) {
+			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
+				if (
+					unitToRemove.unit.name === 'Skeletons (Tomb Kings)' ||
+					unitToRemove.unit.name === 'Skeleton Bowmen (Tomb Kings)'
+				) {
+					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
+						listedUnits[i2].count -= 1
+					}
+				}
+				if (
+					unitToRemove.unit.name !== 'Skeletons (Tomb Kings)' &&
+					unitToRemove.unit.name !== 'Skeleton Bowmen (Tomb Kings)' &&
+					unitToRemove.unit.unit_type !== 'General'
+				) {
+					if (
+						skeletonCount >= wouldBeMaximumCount * 2 &&
+						skeletonBowmanCount >= wouldBeMaximumCount * 2
+					) {
+						if (listedUnits[i2].count > 1) {
+							listedUnits[i2].count -= 1
+						} else {
+							for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
+								if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
+									selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
+								}
+							}
+							listedUnits.splice(listedUnits.indexOf(listedUnits[i2]), 1)
+						}
+					}
+				}
+			}
+			for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
+				if (
+					selectedAuxiliaries[i3].unitName === unitToRemove.unit.name &&
+					listedUnits.length !== this.state.listedUnits.length
+				) {
+					if (selectedAuxiliaries[i3].count > listedUnits[i2].count) {
+						selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
+					}
+				}
+			}
+		}
 
 		this.setState({
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal(listedUnits, selectedAuxiliaries, 'placeholder'),
-			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
+			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -278,8 +303,8 @@ class DemonsContainer extends Component {
 
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
-			unitCount: this.calculateUnitCount(this.state.listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -304,8 +329,8 @@ class DemonsContainer extends Component {
 
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
-			unitCount: this.calculateUnitCount(this.state.listedUnits) + this.calculateUnitCount(selectedAuxiliaries)
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
 		})
 	}
 
@@ -335,7 +360,7 @@ class DemonsContainer extends Component {
 
 		this.setState({
 			selectedMagicItems: selectedMagicItems,
-			pointTotal: this.calculatePointTotal('placeholder', 'placeholder', selectedMagicItems),
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, this.state.selectedAuxiliaries, selectedMagicItems),
 			unitBeingGivenMagicItem: ''
 		})
 		this.toggleMagicItems()
@@ -360,7 +385,7 @@ class DemonsContainer extends Component {
 
 		this.setState({
 			selectedMagicItems: selectedMagicItems,
-			pointTotal: this.calculatePointTotal('placeholder', 'placeholder', selectedMagicItems)
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, this.state.selectedAuxiliaries, selectedMagicItems)
 		})
 	}
 
@@ -429,22 +454,22 @@ class DemonsContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 3,
-						name: 'Chaos Warriors (Chaos)',
-						display_name: 'Chaos Warrior unit',
-						option_screen_name: 'Chaos Warriors',
-						list_name: 'Chaos Warriors',
+						wmr_army_id: 2,
+						name: 'Skeletons (Tomb Kings)',
+						display_name: 'Skeleton unit',
+						option_screen_name: 'Skeletons',
+						list_name: 'Skeletons',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '4',
-						hits: '4',
-						armor: '4+',
+						attacks: '2',
+						hits: '3',
+						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 140,
-						minimum: 1,
+						points: 30,
+						minimum: 2,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -456,22 +481,22 @@ class DemonsContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 3,
-						name: 'Chaos Marauders (Chaos)',
-						display_name: 'Chaos Marauder unit',
-						option_screen_name: 'Chaos Marauders',
-						list_name: 'Chaos Marauders',
+						wmr_army_id: 2,
+						name: 'Skeleton Bowmen (Tomb Kings)',
+						display_name: 'Skeleton Bowman unit',
+						option_screen_name: 'Skeleton Bowmen',
+						list_name: 'Skeleton Bowmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 2,
-						attacks: '3',
+						attacks: '2/1',
 						hits: '3',
-						armor: '5+',
+						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 60,
-						minimum: 1,
+						points: 45,
+						minimum: 2,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -483,24 +508,24 @@ class DemonsContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 3,
-						name: 'General (Chaos)',
-						display_name: 'General',
-						option_screen_name: 'the General',
-						list_name: 'General',
+						wmr_army_id: 2,
+						name: 'Tomb King (Tomb Kings)',
+						display_name: 'Tomb King',
+						option_screen_name: 'the Tomb King',
+						list_name: 'Tomb King',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 12,
+						order_within_army: 10,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 125,
+						points: 130,
 						minimum: 1,
 						maximum: 1,
-						special_rules: '-',
+						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -508,8 +533,8 @@ class DemonsContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 0,
-			unitCount: 0,
+			pointTotal: 280,
+			unitCount: 5,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -602,7 +627,7 @@ class DemonsContainer extends Component {
 				/>
 		}
 
-		let breakPoint = this.calculateBreakPoint(listedUnits, this.state.selectedAuxiliaries)
+		let breakPoint = this.props.calculateBreakPoint(listedUnits, this.state.selectedAuxiliaries)
 		let pointTotalDisplay =
 			<div className={style['point-total']}>
 				Points: <span className={style['bold']}>{this.state.pointTotal}</span><br />

@@ -110,10 +110,6 @@ class TombKingsContainer extends Component {
 			unitBeingGivenAuxiliary: '',
 			unitBeingGivenMagicItem: ''
 		}
-		this.calculatePointTotal = this.calculatePointTotal.bind(this)
-		this.calculateUnitCount = this.calculateUnitCount.bind(this)
-		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
-		this.calculateMaximumCount = this.calculateMaximumCount.bind(this)
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
@@ -129,79 +125,6 @@ class TombKingsContainer extends Component {
 		this.updateUnitBeingGivenAuxiliary = this.updateUnitBeingGivenAuxiliary.bind(this)
 		this.updateUnitBeingGivenMagicItem = this.updateUnitBeingGivenMagicItem.bind(this)
 		this.clearList = this.clearList.bind(this)
-	}
-
-	calculatePointTotal(unitArray, auxiliaryArray, magicItemArray) {
-		let pointTotal = 0
-		let i2
-		if (unitArray !== 'placeholder') {
-			for (i2 = 0; i2 < unitArray.length; i2++) {
-				pointTotal += (parseInt(unitArray[i2].unit.points) * parseInt(unitArray[i2].count))
-			}
-		} else {
-			for (i2 = 0; i2 < this.state.listedUnits.length; i2++) {
-				pointTotal += (parseInt(this.state.listedUnits[i2].unit.points) * parseInt(this.state.listedUnits[i2].count))
-			}			
-		}
-		if (auxiliaryArray !== 'placeholder') {
-			for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-				pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points) * auxiliaryArray[i2].count
-			}			
-		} else {
-			for (i2 = 0; i2 < this.state.selectedAuxiliaries.length; i2++) {
-				pointTotal += parseInt(this.state.selectedAuxiliaries[i2].auxiliary.points) * this.state.selectedAuxiliaries[i2].count
-			}			
-		}
-		if (magicItemArray !== 'placeholder') {
-			for (i2 = 0; i2 < magicItemArray.length; i2++) {
-				pointTotal += parseInt(magicItemArray[i2].magicItem.points)
-			}			
-		} else {
-			for (i2 = 0; i2 < this.state.selectedMagicItems.length; i2++) {
-				pointTotal += parseInt(this.state.selectedMagicItems[i2].magicItem.points)
-			}
-		}
-		return pointTotal
-	}
-
-	calculateUnitCount(array) {
-		let count = 0
-		let i2
-		for (i2 = 0; i2 < array.length; i2++) {
-			count += array[i2].count
-		}
-		return count
-	}
-
-	calculateBreakPoint(unitArray, auxiliaryArray) {
-		let breakPoint = 0
-		let i2
-		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (
-				unitArray[i2].unit.unit_type !== 'General' &&
-				unitArray[i2].unit.unit_type !== 'Hero' &&
-				unitArray[i2].unit.unit_type !== 'Wizard'
-			) {
-				breakPoint += unitArray[i2].count
-			}
-		}
-		for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-			if (auxiliaryArray[i2].auxiliary.special_rules.includes('not independent')) {
-				breakPoint += auxiliaryArray[i2].count
-			}
-		}
-		return breakPoint
-	}
-
-	calculateMaximumCount(pointTotal) {
-		let maximumCount
-		if (pointTotal < 2000) {
-			maximumCount = 1
-		} else {
-			let calculation = (pointTotal / 1000).toFixed(20)
-			maximumCount = Math.floor(calculation)
-		}
-		return maximumCount
 	}
 
 	determineIfGreyedOut(unitArray) {
@@ -230,7 +153,7 @@ class TombKingsContainer extends Component {
 			}
 		}
 		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
-			wouldBeMaximumCount = this.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
+			wouldBeMaximumCount = this.props.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
 
 			for (i3 = 0; i3 < unitArray.length; i3++) {
 				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
@@ -286,8 +209,8 @@ class TombKingsContainer extends Component {
 		}
 		this.setState({
 			listedUnits: listedUnits,
-			pointTotal: this.calculatePointTotal(listedUnits, 'placeholder', 'placeholder'),
-			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(this.state.selectedAuxiliaries),
+			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -297,7 +220,7 @@ class TombKingsContainer extends Component {
 		let listedUnits = this.state.listedUnits
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
-		let wouldBeMaximumCount = this.calculateMaximumCount(wouldBePointTotal)
+		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
 		let skeletonCount = 0
 		let skeletonBowmanCount = 0
 		let i2
@@ -359,8 +282,8 @@ class TombKingsContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal(listedUnits, selectedAuxiliaries, 'placeholder'),
-			unitCount: this.calculateUnitCount(listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
+			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -380,8 +303,8 @@ class TombKingsContainer extends Component {
 
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
-			unitCount: this.calculateUnitCount(this.state.listedUnits) + this.calculateUnitCount(selectedAuxiliaries),
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -406,8 +329,8 @@ class TombKingsContainer extends Component {
 
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
-			pointTotal: this.calculatePointTotal('placeholder', selectedAuxiliaries, 'placeholder'),
-			unitCount: this.calculateUnitCount(this.state.listedUnits) + this.calculateUnitCount(selectedAuxiliaries)
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
 		})
 	}
 
@@ -437,7 +360,7 @@ class TombKingsContainer extends Component {
 
 		this.setState({
 			selectedMagicItems: selectedMagicItems,
-			pointTotal: this.calculatePointTotal('placeholder', 'placeholder', selectedMagicItems),
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, this.state.selectedAuxiliaries, selectedMagicItems),
 			unitBeingGivenMagicItem: ''
 		})
 		this.toggleMagicItems()
@@ -462,7 +385,7 @@ class TombKingsContainer extends Component {
 
 		this.setState({
 			selectedMagicItems: selectedMagicItems,
-			pointTotal: this.calculatePointTotal('placeholder', 'placeholder', selectedMagicItems)
+			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, this.state.selectedAuxiliaries, selectedMagicItems)
 		})
 	}
 
@@ -704,7 +627,7 @@ class TombKingsContainer extends Component {
 				/>
 		}
 
-		let breakPoint = this.calculateBreakPoint(listedUnits, this.state.selectedAuxiliaries)
+		let breakPoint = this.props.calculateBreakPoint(listedUnits, this.state.selectedAuxiliaries)
 		let pointTotalDisplay =
 			<div className={style['point-total']}>
 				Points: <span className={style['bold']}>{this.state.pointTotal}</span><br />
