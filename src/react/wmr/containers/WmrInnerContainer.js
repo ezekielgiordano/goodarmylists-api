@@ -33,11 +33,70 @@ class WmrInnerContainer extends Component {
 			selectedArmy: ''
 		}
 		this.updateSelectedArmy = this.updateSelectedArmy.bind(this)
+		this.calculatePointTotal = this.calculatePointTotal.bind(this)
+		this.calculateUnitCount = this.calculateUnitCount.bind(this)
+		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
+		this.calculateMaximumCount = this.calculateMaximumCount.bind(this)
 	}
 
 	updateSelectedArmy(army) {
 		this.setState({ selectedArmy: army.value })
 	}
+
+	calculatePointTotal(unitArray, auxiliaryArray, magicItemArray) {
+		let pointTotal = 0
+		let i2
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			pointTotal += (parseInt(unitArray[i2].unit.points) * parseInt(unitArray[i2].count))
+		}
+		for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
+			pointTotal += parseInt(auxiliaryArray[i2].auxiliary.points) * auxiliaryArray[i2].count
+		}			
+		for (i2 = 0; i2 < magicItemArray.length; i2++) {
+			pointTotal += parseInt(magicItemArray[i2].magicItem.points)
+		}			
+		return pointTotal
+	}
+
+	calculateUnitCount(array) {
+		let count = 0
+		let i2
+		for (i2 = 0; i2 < array.length; i2++) {
+			count += array[i2].count
+		}
+		return count
+	}
+
+	calculateBreakPoint(unitArray, auxiliaryArray) {
+		let breakPoint = 0
+		let i2
+		for (i2 = 0; i2 < unitArray.length; i2++) {
+			if (
+				unitArray[i2].unit.unit_type !== 'General' &&
+				unitArray[i2].unit.unit_type !== 'Hero' &&
+				unitArray[i2].unit.unit_type !== 'Wizard'
+			) {
+				breakPoint += unitArray[i2].count
+			}
+		}
+		for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
+			if (auxiliaryArray[i2].auxiliary.special_rules.includes('not independent')) {
+				breakPoint += auxiliaryArray[i2].count
+			}
+		}
+		return breakPoint
+	}
+
+	calculateMaximumCount(pointTotal) {
+		let maximumCount
+		if (pointTotal < 2000) {
+			maximumCount = 1
+		} else {
+			let calculation = (pointTotal / 1000).toFixed(20)
+			maximumCount = Math.floor(calculation)
+		}
+		return maximumCount
+	}				
 
 	render() {
 		document.body.style.overflow = 'hidden'
@@ -53,11 +112,15 @@ class WmrInnerContainer extends Component {
 		let display
 		if (selectedArmy.display_name === 'The Empire') {
 			display =
-				<EmpireContainer 
+				<EmpireContainer
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Tomb Kings') {
@@ -67,6 +130,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Chaos') {
@@ -76,6 +143,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Orcs') {
@@ -85,6 +156,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'High Elves') {
@@ -94,6 +169,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Dwarfs') {
@@ -103,6 +182,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Skaven') {
@@ -112,6 +195,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Lizardmen') {
@@ -121,6 +208,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Bretonnia') {
@@ -130,6 +221,9 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Kislev') {
@@ -139,6 +233,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Dark Elves') {
@@ -148,6 +246,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Demons') {
@@ -157,6 +259,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Araby') {
@@ -166,6 +272,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Vampire Counts') {
@@ -175,6 +285,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Dogs of War') {
@@ -184,6 +298,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Ogre Kingdoms') {
@@ -193,6 +311,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Albion') {
@@ -202,6 +324,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Goblins') {
@@ -211,6 +337,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Witch Hunters') {
@@ -220,6 +350,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Chaos Dwarfs') {
@@ -229,6 +363,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Albion') {
@@ -238,6 +376,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Wood Elves') {
@@ -247,6 +389,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Beastmen') {
@@ -256,6 +402,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 		if (selectedArmy.display_name === 'Norse') {
@@ -265,6 +415,10 @@ class WmrInnerContainer extends Component {
 					units={this.props.units}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
+					calculatePointTotal={this.calculatePointTotal}
+					calculateUnitCount={this.calculateUnitCount}
+					calculateBreakPoint={this.calculateBreakPoint}
+					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
 
