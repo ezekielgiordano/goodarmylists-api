@@ -20,9 +20,13 @@ const UnitEntryButton = props => {
 			<div className={style['unit-entry-button-row']}>
 				<div className={style['unit-entry-button-point-value-div']}>
 					{extraSpace}
-					<span className={style['unit-entry-button-point-value-label-wmr']}>
-						{parseInt(props.unit.points)}{' '}
+					<span
+						// onClick={() => props.updateUnitWhoseInformationIsShown(props.unit)}
+						className={style['unit-entry-button-point-value-label-wmr']}
+					>
+						{parseInt(props.unit.points)}
 					</span>
+					<span>{' '}</span>
 				</div>
 				<div className={style['unit-entry-button-label-div']}>
 					<span
@@ -38,9 +42,13 @@ const UnitEntryButton = props => {
 			<div className={style['unit-entry-button-row']}>
 				<div className={style['unit-entry-button-point-value-div-greyed-out']}>
 					{extraSpace}
-					<span className= {style['unit-entry-button-point-value-label-greyed-out']}>
-						{parseInt(props.unit.points)}{' '}
+					<span
+						// onClick={() => props.updateUnitWhoseInformationIsShown(props.unit)}
+						className={style['unit-entry-button-point-value-label-greyed-out']}
+					>
+						{parseInt(props.unit.points)}
 					</span>
+					<span>{' '}</span>
 				</div>
 				<div>
 					<span className={style['unit-entry-button-label-greyed-out']}>

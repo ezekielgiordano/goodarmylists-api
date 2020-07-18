@@ -11,7 +11,7 @@ import InformationTile from '../components/InformationTile'
 import AuxiliarySelectionTile from '../components/AuxiliarySelectionTile'
 import MagicItemSelectionTile from '../components/MagicItemSelectionTile'
 
-class EmpireContainer extends Component {
+class DarkElvesContainer extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -21,25 +21,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Halberdiers (The Empire)',
-						display_name: 'Halberdier unit',
-						option_screen_name: 'Halberdiers',
-						list_name: 'Halberdiers',
+						wmr_army_id: 3,
+						name: 'Chaos Warriors (Chaos)',
+						display_name: 'Chaos Warrior unit',
+						option_screen_name: 'Chaos Warriors',
+						list_name: 'Chaos Warriors',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '3',
-						hits: '3',
-						armor: '6+',
+						attacks: '4',
+						hits: '4',
+						armor: '4+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
-						minimum: 2,
+						points: 140,
+						minimum: 1,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -48,25 +48,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Crossbowmen (The Empire)',
-						display_name: 'Crossbowman unit',
-						option_screen_name: 'Crossbowmen',
-						list_name: 'Crossbowmen',
+						wmr_army_id: 3,
+						name: 'Chaos Marauders (Chaos)',
+						display_name: 'Chaos Marauder unit',
+						option_screen_name: 'Chaos Marauders',
+						list_name: 'Chaos Marauders',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
-						order_within_army: 3,
-						attacks: '3/1',
+						order_within_army: 2,
+						attacks: '3',
 						hits: '3',
-						armor: '0',
+						armor: '5+',
 						command: '-',
 						unit_size: '3',
-						points: 55,
-						minimum: 2,
+						points: 60,
+						minimum: 1,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -75,15 +75,15 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'General (The Empire)',
+						wmr_army_id: 3,
+						name: 'General (Chaos)',
 						display_name: 'General',
 						option_screen_name: 'the General',
 						list_name: 'General',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 11,
+						order_within_army: 12,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
@@ -100,8 +100,8 @@ class EmpireContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 325,
-			unitCount: 5,
+			pointTotal: 0,
+			unitCount: 0,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -109,7 +109,6 @@ class EmpireContainer extends Component {
 			unitWhoseInformationIsShown: '',
 			unitBeingGivenAuxiliary: '',
 			unitBeingGivenMagicItem: ''
-
 		}
 		this.calculatePointTotal = this.calculatePointTotal.bind(this)
 		this.calculateUnitCount = this.calculateUnitCount.bind(this)
@@ -210,77 +209,13 @@ class EmpireContainer extends Component {
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
 		let wouldBeMaximumCount = 0
-		let halberdierCount = 0
-		let crossbowmanCount = 0
-		let handgunnerCount = 0
-		let handgunnerOrMax = 0
-		let handgunnerOrMaxOrZero = 0
+		let skeletonCount = 0
+		let skeletonBowmanCount = 0
 		let locked = false
 		let i2
 		let i3
 
-		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (unitArray[i2].unit.name === 'Halberdiers (The Empire)') {
-				halberdierCount += unitArray[i2].count
-			}	
-			if (unitArray[i2].unit.name === 'Crossbowmen (The Empire)') {
-				crossbowmanCount += unitArray[i2].count
-			}			
-			if (unitArray[i2].unit.name === 'Handgunners (The Empire)') {
-				handgunnerCount += unitArray[i2].count
-			}
-		}	
 
-		for (i2 = 0; i2 < this.props.units.length; i2++) {
-			if (this.props.units[i2].wmr_army_id === this.props.selectedArmy.id) {
-				unitsInArmy.push(this.props.units[i2])
-			}
-		}
-		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
-			wouldBeMaximumCount = this.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
-
-			if (handgunnerCount > wouldBeMaximumCount) {
-				handgunnerOrMax = wouldBeMaximumCount
-			} else {
-				handgunnerOrMax = handgunnerCount
-			}
-			if (handgunnerCount === 0) {
-				handgunnerOrMaxOrZero = 0
-			} else {
-				handgunnerOrMaxOrZero = handgunnerOrMax
-			}	
-
-			for (i3 = 0; i3 < unitArray.length; i3++) {
-				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
-					if (unitsInArmy[i2].is_unique === true || unitsInArmy[i2].is_unique === 't') {
-						locked = true
-					}
-					if (
-						unitArray[i3].count >= wouldBeMaximumCount &&
-						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * wouldBeMaximumCount
-					) {
-						locked = true
-					}
-				}
-			}
-
-			if (
-				halberdierCount < wouldBeMaximumCount * 2 ||
-				crossbowmanCount + handgunnerOrMaxOrZero < wouldBeMaximumCount * 2
-			) {
-				locked = true
-			}
-			if (
-				unitsInArmy[i2].name === 'Halberdiers (The Empire)' ||
-				unitsInArmy[i2].name === 'Crossbowmen (The Empire)'
-			) {
-				locked = false
-			}
-			if (locked === true) {
-				greyedOutUnits.push(unitsInArmy[i2])
-			}
-			locked = false
-		}
 
 		return greyedOutUnits
 	}
@@ -293,7 +228,6 @@ class EmpireContainer extends Component {
 			if (listedUnits[i2].unit.name === unitToAdd.name) {
 				listedUnits[i2].count += 1
 				duplicateCount += 1
-
 			}
 		}
 		if (duplicateCount === 0) {
@@ -317,82 +251,8 @@ class EmpireContainer extends Component {
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
 		let wouldBeMaximumCount = this.calculateMaximumCount(wouldBePointTotal)
-		let halberdierCount = 0
-		let crossbowmanCount = 0
-		let handgunnerCount = 0
-		let handgunnerOrMax = 0
-		let handgunnerOrMaxOrZero = 0
-		let i2
-		let i3
 
-		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === 'Halberdiers (The Empire)') {
-				halberdierCount += listedUnits[i2].count
-			}	
-			if (listedUnits[i2].unit.name === 'Crossbowmen (The Empire)') {
-				crossbowmanCount += listedUnits[i2].count
-			}			
-			if (listedUnits[i2].unit.name === 'Handgunners (The Empire)') {
-				handgunnerCount += listedUnits[i2].count
-			}
-		}
-		if (handgunnerCount > wouldBeMaximumCount) {
-			handgunnerOrMax = wouldBeMaximumCount
-		} else {
-			handgunnerOrMax = handgunnerCount
-		}
-		if (handgunnerCount === 0) {
-			handgunnerOrMaxOrZero = 0
-		} else {
-			handgunnerOrMaxOrZero = handgunnerOrMax
-		}
 
-		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
-				if (unitToRemove.unit.name === 'Halberdiers (The Empire)') {
-					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
-						listedUnits[i2].count -= 1
-					}
-				}
-				if (unitToRemove.unit.name === 'Crossbowmen (The Empire)') {
-
-					if (listedUnits[i2].count + handgunnerOrMax - 1 >= wouldBeMaximumCount * 2) {
-						listedUnits[i2].count -= 1
-					}
-				}
-				if (
-					unitToRemove.unit.name !== 'Halberdiers (The Empire)' &&
-					unitToRemove.unit.name !== 'Crossbowmen (The Empire)' &&
-					unitToRemove.unit.unit_type !== 'General'
-				) {
-					if (
-						halberdierCount >= wouldBeMaximumCount * 2 &&
-						crossbowmanCount + handgunnerOrMaxOrZero >= wouldBeMaximumCount * 2
-					) {
-						if (listedUnits[i2].count > 1) {
-							listedUnits[i2].count -= 1
-						} else {
-							for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
-								if (selectedAuxiliaries[i3].unitName === unitToRemove.unit.name) {
-									selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
-								}
-							}
-							listedUnits.splice(listedUnits.indexOf(listedUnits[i2]), 1)
-						}
-					}
-				}
-			}
-			for (i3 = selectedAuxiliaries.length - 1; i3 >= 0; i3--) {
-				if (
-					selectedAuxiliaries[i3].unitName === unitToRemove.unit.name &&
-					listedUnits.length !== this.state.listedUnits.length
-				) {
-					if (selectedAuxiliaries[i3].count > listedUnits[i2].count) {
-						selectedAuxiliaries.splice(selectedAuxiliaries.indexOf(selectedAuxiliaries[i3]), 1)
-					}
-				}
-			}
-		}
 
 		this.setState({
 			listedUnits: listedUnits,
@@ -569,25 +429,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Halberdiers (The Empire)',
-						display_name: 'Halberdier unit',
-						option_screen_name: 'Halberdiers',
-						list_name: 'Halberdiers',
+						wmr_army_id: 3,
+						name: 'Chaos Warriors (Chaos)',
+						display_name: 'Chaos Warrior unit',
+						option_screen_name: 'Chaos Warriors',
+						list_name: 'Chaos Warriors',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '3',
-						hits: '3',
-						armor: '6+',
+						attacks: '4',
+						hits: '4',
+						armor: '4+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
-						minimum: 2,
+						points: 140,
+						minimum: 1,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -596,25 +456,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Crossbowmen (The Empire)',
-						display_name: 'Crossbowman unit',
-						option_screen_name: 'Crossbowmen',
-						list_name: 'Crossbowmen',
+						wmr_army_id: 3,
+						name: 'Chaos Marauders (Chaos)',
+						display_name: 'Chaos Marauder unit',
+						option_screen_name: 'Chaos Marauders',
+						list_name: 'Chaos Marauders',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
-						order_within_army: 3,
+						order_within_army: 2,
 						attacks: '3',
 						hits: '3',
-						armor: '0',
+						armor: '5+',
 						command: '-',
 						unit_size: '3',
-						points: 55,
-						minimum: 2,
+						points: 60,
+						minimum: 1,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -623,15 +483,15 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'General (The Empire)',
+						wmr_army_id: 3,
+						name: 'General (Chaos)',
 						display_name: 'General',
 						option_screen_name: 'the General',
 						list_name: 'General',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 11,
+						order_within_army: 12,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
@@ -648,8 +508,8 @@ class EmpireContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 325,
-			unitCount: 5,
+			pointTotal: 0,
+			unitCount: 0,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -871,4 +731,4 @@ class EmpireContainer extends Component {
 	}
 }
 
-export default EmpireContainer
+export default DarkElvesContainer
