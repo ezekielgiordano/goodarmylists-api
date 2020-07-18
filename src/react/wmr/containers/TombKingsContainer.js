@@ -11,7 +11,7 @@ import InformationTile from '../components/InformationTile'
 import AuxiliarySelectionTile from '../components/AuxiliarySelectionTile'
 import MagicItemSelectionTile from '../components/MagicItemSelectionTile'
 
-class EmpireContainer extends Component {
+class TombKingsContainer extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -21,25 +21,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Halberdiers (The Empire)',
-						display_name: 'Halberdier unit',
-						option_screen_name: 'Halberdiers',
-						list_name: 'Halberdiers',
+						wmr_army_id: 2,
+						name: 'Skeletons (Tomb Kings)',
+						display_name: 'Skeleton unit',
+						option_screen_name: 'Skeletons',
+						list_name: 'Skeletons',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '3',
+						attacks: '2',
 						hits: '3',
 						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 30,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -48,25 +48,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Crossbowmen (The Empire)',
-						display_name: 'Crossbowman unit',
-						option_screen_name: 'Crossbowmen',
-						list_name: 'Crossbowmen',
+						wmr_army_id: 2,
+						name: 'Skeleton Bowmen (Tomb Kings)',
+						display_name: 'Skeleton Bowman unit',
+						option_screen_name: 'Skeleton Bowmen',
+						list_name: 'Skeleton Bowmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
-						order_within_army: 3,
-						attacks: '3/1',
+						order_within_army: 2,
+						attacks: '2/1',
 						hits: '3',
 						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 55,
+						points: 45,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -75,24 +75,24 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'General (The Empire)',
-						display_name: 'General',
-						option_screen_name: 'the General',
-						list_name: 'General',
+						wmr_army_id: 2,
+						name: 'Tomb King (Tomb Kings)',
+						display_name: 'Tomb King',
+						option_screen_name: 'the Tomb King',
+						list_name: 'Tomb King',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 11,
+						order_within_army: 10,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 125,
+						points: 130,
 						minimum: 1,
 						maximum: 1,
-						special_rules: '-',
+						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -100,7 +100,7 @@ class EmpireContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 325,
+			pointTotal: 280,
 			unitCount: 5,
 			informationVisible: false,
 			formattedListVisible: false,
@@ -109,7 +109,6 @@ class EmpireContainer extends Component {
 			unitWhoseInformationIsShown: '',
 			unitBeingGivenAuxiliary: '',
 			unitBeingGivenMagicItem: ''
-
 		}
 		this.calculatePointTotal = this.calculatePointTotal.bind(this)
 		this.calculateUnitCount = this.calculateUnitCount.bind(this)
@@ -210,25 +209,19 @@ class EmpireContainer extends Component {
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
 		let wouldBeMaximumCount = 0
-		let halberdierCount = 0
-		let crossbowmanCount = 0
-		let handgunnerCount = 0
-		let handgunnerOrMax = 0
-		let handgunnerOrMaxOrZero = 0
+		let skeletonCount = 0
+		let skeletonBowmanCount = 0
 		let locked = false
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (unitArray[i2].unit.name === 'Halberdiers (The Empire)') {
-				halberdierCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Skeletons (Tomb Kings)') {
+				skeletonCount += unitArray[i2].count
 			}	
-			if (unitArray[i2].unit.name === 'Crossbowmen (The Empire)') {
-				crossbowmanCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
+				skeletonBowmanCount += unitArray[i2].count
 			}			
-			if (unitArray[i2].unit.name === 'Handgunners (The Empire)') {
-				handgunnerCount += unitArray[i2].count
-			}
 		}	
 
 		for (i2 = 0; i2 < this.props.units.length; i2++) {
@@ -238,17 +231,6 @@ class EmpireContainer extends Component {
 		}
 		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
 			wouldBeMaximumCount = this.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
-
-			if (handgunnerCount > wouldBeMaximumCount) {
-				handgunnerOrMax = wouldBeMaximumCount
-			} else {
-				handgunnerOrMax = handgunnerCount
-			}
-			if (handgunnerCount === 0) {
-				handgunnerOrMaxOrZero = 0
-			} else {
-				handgunnerOrMaxOrZero = handgunnerOrMax
-			}	
 
 			for (i3 = 0; i3 < unitArray.length; i3++) {
 				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
@@ -265,14 +247,14 @@ class EmpireContainer extends Component {
 			}
 
 			if (
-				halberdierCount < wouldBeMaximumCount * 2 ||
-				crossbowmanCount + handgunnerOrMaxOrZero < wouldBeMaximumCount * 2
+				skeletonCount < wouldBeMaximumCount * 2 ||
+				skeletonBowmanCount < wouldBeMaximumCount * 2
 			) {
 				locked = true
 			}
 			if (
-				unitsInArmy[i2].name === 'Halberdiers (The Empire)' ||
-				unitsInArmy[i2].name === 'Crossbowmen (The Empire)'
+				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
+				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
 			) {
 				locked = false
 			}
@@ -293,7 +275,6 @@ class EmpireContainer extends Component {
 			if (listedUnits[i2].unit.name === unitToAdd.name) {
 				listedUnits[i2].count += 1
 				duplicateCount += 1
-
 			}
 		}
 		if (duplicateCount === 0) {
@@ -317,57 +298,38 @@ class EmpireContainer extends Component {
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
 		let wouldBeMaximumCount = this.calculateMaximumCount(wouldBePointTotal)
-		let halberdierCount = 0
-		let crossbowmanCount = 0
-		let handgunnerCount = 0
-		let handgunnerOrMax = 0
-		let handgunnerOrMaxOrZero = 0
+		let skeletonCount = 0
+		let skeletonBowmanCount = 0
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === 'Halberdiers (The Empire)') {
-				halberdierCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Skeletons (Tomb Kings)') {
+				skeletonCount += listedUnits[i2].count
 			}	
-			if (listedUnits[i2].unit.name === 'Crossbowmen (The Empire)') {
-				crossbowmanCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
+				skeletonBowmanCount += listedUnits[i2].count
 			}			
-			if (listedUnits[i2].unit.name === 'Handgunners (The Empire)') {
-				handgunnerCount += listedUnits[i2].count
-			}
-		}
-		if (handgunnerCount > wouldBeMaximumCount) {
-			handgunnerOrMax = wouldBeMaximumCount
-		} else {
-			handgunnerOrMax = handgunnerCount
-		}
-		if (handgunnerCount === 0) {
-			handgunnerOrMaxOrZero = 0
-		} else {
-			handgunnerOrMaxOrZero = handgunnerOrMax
 		}
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
-				if (unitToRemove.unit.name === 'Halberdiers (The Empire)') {
+				if (
+					unitToRemove.unit.name === 'Skeletons (Tomb Kings)' ||
+					unitToRemove.unit.name === 'Skeleton Bowmen (Tomb Kings)'
+				) {
 					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
-				if (unitToRemove.unit.name === 'Crossbowmen (The Empire)') {
-
-					if (listedUnits[i2].count + handgunnerOrMax - 1 >= wouldBeMaximumCount * 2) {
-						listedUnits[i2].count -= 1
-					}
-				}
 				if (
-					unitToRemove.unit.name !== 'Halberdiers (The Empire)' &&
-					unitToRemove.unit.name !== 'Crossbowmen (The Empire)' &&
+					unitToRemove.unit.name !== 'Skeletons (Tomb Kings)' &&
+					unitToRemove.unit.name !== 'Skeleton Bowmen (Tomb Kings)' &&
 					unitToRemove.unit.unit_type !== 'General'
 				) {
 					if (
-						halberdierCount >= wouldBeMaximumCount * 2 &&
-						crossbowmanCount + handgunnerOrMaxOrZero >= wouldBeMaximumCount * 2
+						skeletonCount >= wouldBeMaximumCount * 2 &&
+						skeletonBowmanCount >= wouldBeMaximumCount * 2
 					) {
 						if (listedUnits[i2].count > 1) {
 							listedUnits[i2].count -= 1
@@ -569,25 +531,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Halberdiers (The Empire)',
-						display_name: 'Halberdier unit',
-						option_screen_name: 'Halberdiers',
-						list_name: 'Halberdiers',
+						wmr_army_id: 2,
+						name: 'Skeletons (Tomb Kings)',
+						display_name: 'Skeleton unit',
+						option_screen_name: 'Skeletons',
+						list_name: 'Skeletons',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '3',
+						attacks: '2',
 						hits: '3',
 						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 30,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -596,25 +558,25 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'Crossbowmen (The Empire)',
-						display_name: 'Crossbowman unit',
-						option_screen_name: 'Crossbowmen',
-						list_name: 'Crossbowmen',
+						wmr_army_id: 2,
+						name: 'Skeleton Bowmen (Tomb Kings)',
+						display_name: 'Skeleton Bowman unit',
+						option_screen_name: 'Skeleton Bowmen',
+						list_name: 'Skeleton Bowmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
-						order_within_army: 3,
-						attacks: '3',
+						order_within_army: 2,
+						attacks: '2/1',
 						hits: '3',
 						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 55,
+						points: 45,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
-						can_have_aux: true,
+						can_have_aux: false,
 						can_have_mag: true
 					}
 				},
@@ -623,24 +585,24 @@ class EmpireContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 1,
-						name: 'General (The Empire)',
-						display_name: 'General',
-						option_screen_name: 'the General',
-						list_name: 'General',
+						wmr_army_id: 2,
+						name: 'Tomb King (Tomb Kings)',
+						display_name: 'Tomb King',
+						option_screen_name: 'the Tomb King',
+						list_name: 'Tomb King',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 11,
+						order_within_army: 10,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 125,
+						points: 130,
 						minimum: 1,
 						maximum: 1,
-						special_rules: '-',
+						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -648,7 +610,7 @@ class EmpireContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 325,
+			pointTotal: 280,
 			unitCount: 5,
 			informationVisible: false,
 			formattedListVisible: false,
@@ -871,4 +833,4 @@ class EmpireContainer extends Component {
 	}
 }
 
-export default EmpireContainer
+export default TombKingsContainer
