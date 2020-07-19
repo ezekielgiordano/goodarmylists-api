@@ -111,6 +111,7 @@ class OrcsContainer extends Component {
 			unitBeingGivenMagicItem: ''
 		}
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
+		this.determineIfValidAfterPointIncrease = this.determineIfValidAfterPointIncrease.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
 		this.addAuxiliary = this.addAuxiliary.bind(this)
@@ -196,6 +197,37 @@ class OrcsContainer extends Component {
 		}
 
 		return greyedOutUnits
+	}
+
+	determineIfValidAfterPointIncrease(pointIncrease) {
+		let maximumCountBefore = this.props.calculateMaximumCount(this.state.pointTotal)
+		let maximumCountAfter = this.props.calculateMaximumCount(this.state.pointTotal + pointIncrease)
+		let valid
+		if (maximumCountBefore === maximumCountAfter) {
+			valid = true
+		} else {
+			let listedUnits = this.state.listedUnits
+			let orcWarriorCount = 0
+			let goblinCount = 0
+			let i2
+			for (i2 = 0; i2 < listedUnits.length; i2++) {
+				if (listedUnits[i2].unit.name === 'Orc Warriors (Orcs)') {
+					orcWarriorCount += listedUnits[i2].count
+				}	
+				if (listedUnits[i2].unit.name === 'Goblins (Orcs)') {
+					goblinCount += listedUnits[i2].count
+				}			
+			}
+			if (
+				orcWarriorCount > maximumCountAfter * 2 ||
+				goblinCount > maximumCountAfter * 2
+			) {
+				valid = false
+			} else {
+				valid = true
+			}
+		}
+		return valid
 	}
 
 	addUnit(unitToAdd) {
@@ -572,9 +604,7 @@ class OrcsContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}		
@@ -588,9 +618,7 @@ class OrcsContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}

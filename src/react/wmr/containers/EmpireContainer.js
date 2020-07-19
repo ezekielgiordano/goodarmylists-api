@@ -112,6 +112,7 @@ class EmpireContainer extends Component {
 
 		}
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
+		this.determineIfValidAfterPointIncrease = this.determineIfValidAfterPointIncrease.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
 		this.addAuxiliary = this.addAuxiliary.bind(this)
@@ -132,7 +133,7 @@ class EmpireContainer extends Component {
 		let unitsInArmy = []
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
-		let wouldBeMaximumCount = 0
+		let maximumCountAfter = 0
 		let halberdierCount = 0
 		let crossbowmanCount = 0
 		let handgunnerCount = 0
@@ -160,10 +161,10 @@ class EmpireContainer extends Component {
 			}
 		}
 		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
-			wouldBeMaximumCount = this.props.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
+			maximumCountAfter = this.props.calculateMaximumCount(pointTotal + parseInt(unitsInArmy[i2].points))
 
-			if (handgunnerCount > wouldBeMaximumCount) {
-				handgunnerOrMax = wouldBeMaximumCount
+			if (handgunnerCount > maximumCountAfter) {
+				handgunnerOrMax = maximumCountAfter
 			} else {
 				handgunnerOrMax = handgunnerCount
 			}
@@ -179,8 +180,8 @@ class EmpireContainer extends Component {
 						locked = true
 					}
 					if (
-						unitArray[i3].count >= wouldBeMaximumCount &&
-						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * wouldBeMaximumCount
+						unitArray[i3].count >= maximumCountAfter &&
+						unitArray[i3].count >= parseInt(unitArray[i3].unit.maximum) * maximumCountAfter
 					) {
 						locked = true
 					}
@@ -188,20 +189,20 @@ class EmpireContainer extends Component {
 			}
 
 			if (
-				halberdierCount < wouldBeMaximumCount * 2 ||
-				crossbowmanCount + handgunnerOrMaxOrZero < wouldBeMaximumCount * 2
+				halberdierCount < maximumCountAfter * 2 ||
+				crossbowmanCount + handgunnerOrMaxOrZero < maximumCountAfter * 2
 			) {
 				locked = true
 			}
 			if (unitsInArmy[i2].name === 'Halberdiers (The Empire)') {
-				if (crossbowmanCount + handgunnerOrMaxOrZero < wouldBeMaximumCount * 2) {
+				if (crossbowmanCount + handgunnerOrMaxOrZero < maximumCountAfter * 2) {
 					locked = true
 				} else {
 					locked = false
 				}
 			}
 			if (unitsInArmy[i2].name === 'Crossbowmen (The Empire)') {
-				if (halberdierCount < wouldBeMaximumCount * 2) {
+				if (halberdierCount < maximumCountAfter * 2) {
 					locked = true
 				} else {
 					locked = false
@@ -209,11 +210,11 @@ class EmpireContainer extends Component {
 			}
 			if (unitsInArmy[i2].name === 'Handgunners (The Empire)') {
 				if (
-					halberdierCount < wouldBeMaximumCount * 2 ||
-					handgunnerCount >= wouldBeMaximumCount * 3
+					halberdierCount < maximumCountAfter * 2 ||
+					handgunnerCount >= maximumCountAfter * 3
 				) {
 					locked = true
-				} else if (crossbowmanCount <= wouldBeMaximumCount - 1) {
+				} else if (crossbowmanCount <= maximumCountAfter - 1) {
 					locked = true
 				} else {
 					locked = false
@@ -226,6 +227,53 @@ class EmpireContainer extends Component {
 		}
 
 		return greyedOutUnits
+	}
+
+	determineIfValidAfterPointIncrease(pointIncrease) {
+		let maximumCountBefore = this.props.calculateMaximumCount(this.state.pointTotal)
+		let maximumCountAfter = this.props.calculateMaximumCount(this.state.pointTotal + pointIncrease)
+		let valid
+		if (maximumCountBefore === maximumCountAfter) {
+			valid = true
+		} else {
+			let listedUnits = this.state.listedUnits
+			let halberdierCount = 0
+			let crossbowmanCount = 0
+			let handgunnerCount = 0
+			let handgunnerOrMax = 0
+			let handgunnerOrMaxOrZero = 0
+			let i2
+			for (i2 = 0; i2 < listedUnits.length; i2++) {
+				if (listedUnits[i2].unit.name === 'Halberdiers (The Empire)') {
+					halberdierCount += listedUnits[i2].count
+				}	
+				if (listedUnits[i2].unit.name === 'Crossbowmen (The Empire)') {
+					crossbowmanCount += listedUnits[i2].count
+				}
+				if (listedUnits[i2].unit.name === 'Handgunners (The Empire)') {
+					handgunnerCount += listedUnits[i2].count
+				}			
+			}
+			if (handgunnerCount > maximumCountAfter) {
+				handgunnerOrMax = maximumCountAfter
+			} else {
+				handgunnerOrMax = handgunnerCount
+			}
+			if (handgunnerCount === 0) {
+				handgunnerOrMaxOrZero = 0
+			} else {
+				handgunnerOrMaxOrZero = handgunnerOrMax
+			}			
+			if (
+				halberdierCount > maximumCountAfter * 2 ||
+				crossbowmanCount + handgunnerOrMaxOrZero > maximumCountAfter * 2
+			) {
+				valid = false
+			} else {
+				valid = true
+			}
+		}
+		return valid
 	}
 
 	addUnit(unitToAdd) {
@@ -259,7 +307,7 @@ class EmpireContainer extends Component {
 		let listedUnits = this.state.listedUnits
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
-		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
+		let maximumCountAfter = this.props.calculateMaximumCount(wouldBePointTotal)
 		let halberdierCount = 0
 		let crossbowmanCount = 0
 		let handgunnerCount = 0
@@ -279,8 +327,8 @@ class EmpireContainer extends Component {
 				handgunnerCount += listedUnits[i2].count
 			}
 		}
-		if (handgunnerCount > wouldBeMaximumCount) {
-			handgunnerOrMax = wouldBeMaximumCount
+		if (handgunnerCount > maximumCountAfter) {
+			handgunnerOrMax = maximumCountAfter
 		} else {
 			handgunnerOrMax = handgunnerCount
 		}
@@ -293,13 +341,13 @@ class EmpireContainer extends Component {
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
 				if (unitToRemove.unit.name === 'Halberdiers (The Empire)') {
-					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
+					if (listedUnits[i2].count - 1 >= maximumCountAfter * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
 				if (unitToRemove.unit.name === 'Crossbowmen (The Empire)') {
 
-					if (listedUnits[i2].count + handgunnerOrMax - 1 >= wouldBeMaximumCount * 2) {
+					if (listedUnits[i2].count + handgunnerOrMax - 1 >= maximumCountAfter * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
@@ -309,8 +357,8 @@ class EmpireContainer extends Component {
 					unitToRemove.unit.unit_type !== 'General'
 				) {
 					if (
-						halberdierCount >= wouldBeMaximumCount * 2 &&
-						crossbowmanCount + handgunnerOrMaxOrZero >= wouldBeMaximumCount * 2
+						halberdierCount >= maximumCountAfter * 2 &&
+						crossbowmanCount + handgunnerOrMaxOrZero >= maximumCountAfter * 2
 					) {
 						if (listedUnits[i2].count > 1) {
 							listedUnits[i2].count -= 1
@@ -622,9 +670,7 @@ class EmpireContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}		
@@ -638,9 +684,7 @@ class EmpireContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}

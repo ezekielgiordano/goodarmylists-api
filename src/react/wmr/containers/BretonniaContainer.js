@@ -139,6 +139,7 @@ class BretonniaContainer extends Component {
 		}
 		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
+		this.determineIfValidAfterPointIncrease = this.determineIfValidAfterPointIncrease.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
 		this.addAuxiliary = this.addAuxiliary.bind(this)
@@ -252,6 +253,42 @@ class BretonniaContainer extends Component {
 		}
 
 		return greyedOutUnits
+	}
+
+	determineIfValidAfterPointIncrease(pointIncrease) {
+		let maximumCountBefore = this.props.calculateMaximumCount(this.state.pointTotal)
+		let maximumCountAfter = this.props.calculateMaximumCount(this.state.pointTotal + pointIncrease)
+		let valid
+		if (maximumCountBefore === maximumCountAfter) {
+			valid = true
+		} else {
+			let listedUnits = this.state.listedUnits
+			let manAtArmsCount = 0
+			let squireCount = 0
+			let knightCount = 0
+			let i2
+			for (i2 = 0; i2 < listedUnits.length; i2++) {
+				if (listedUnits[i2].unit.name === 'Men-at-Arms (Bretonnia)') {
+					manAtArmsCount += listedUnits[i2].count
+				}	
+				if (listedUnits[i2].unit.name === 'Squires (Bretonnia)') {
+					squireCount += listedUnits[i2].count
+				}
+				if (listedUnits[i2].unit.name === 'Knights (Bretonnia)') {
+					knightCount += listedUnits[i2].count
+				}			
+			}
+			if (
+				manAtArmsCount > maximumCountAfter ||
+				squireCount > maximumCountAfter ||
+				knightCount > maximumCountAfter
+			) {
+				valid = false
+			} else {
+				valid = true
+			}
+		}
+		return valid
 	}
 
 	addUnit(unitToAdd) {
@@ -662,9 +699,7 @@ class BretonniaContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}		
@@ -678,9 +713,7 @@ class BretonniaContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}

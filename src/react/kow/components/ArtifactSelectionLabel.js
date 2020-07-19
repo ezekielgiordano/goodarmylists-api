@@ -29,7 +29,9 @@ const ArtifactSelectionLabel = props => {
 			<div className={style['unit-option-selection-tile-row-greyed-out']}>
 				<div className={style['unit-option-label-div']}>
 					{extraSpace}
-					<span>{parseInt(props.artifact.points)}</span>
+					<span className={style['unit-option-points-label-greyed-out']}>
+						{parseInt(props.artifact.points)}
+					</span>
 				</div>
 				<div className={style['unit-option-label-div']}>
 					<span>

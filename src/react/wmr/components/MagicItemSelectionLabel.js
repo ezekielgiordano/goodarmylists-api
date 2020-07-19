@@ -11,9 +11,16 @@ const MagicItemSelectionLabel = props => {
 	}
 
 	let className
-	if (props.highlighted === true) {
+	if (props.highlighted === true && props.greyedOut === true) {
+		className = style['highlighted-unit-option']
+	}
+	if (props.highlighted === true && props.greyedOut === false) {
 		className = style['unit-option-selection-label-highlighted-unit-option']
-	} else {
+	}
+	if (props.highlighted === false && props.greyedOut === true) {
+		className = style['nothing-class']
+	}
+	if (props.highlighted === false && props.greyedOut === false) {
 		className = style['unit-option-selection-label']
 	}
 
@@ -22,22 +29,41 @@ const MagicItemSelectionLabel = props => {
 		countDisplay = `${props.count}x `
 	}
 
+	let display
+	if (props.greyedOut === false) {
+		display =
+			<div className={style['unit-option-selection-tile-row']} id={parseInt(props.magicItem.id)}>
+				<div className={style['unit-option-label-div']}>
+					{extraSpace}
+					<span className={style['magic-item-points-label-wmr']}>{props.magicItem.points}</span>
+				</div>
+				<div className={style['unit-option-label-div']}>
+					<span
+						onClick={() => props.updateHighlightedMagicItems(props.magicItem)}				
+						className={className}
+						id={parseInt(props.magicItem.id)}
+					>
+						{countDisplay}{props.magicItem.display_name}
+					</span>
+				</div>
+			</div>
+	} else {
+		display =
+			<div  className={style['unit-option-selection-tile-row-greyed-out']} id={parseInt(props.magicItem.id)}>
+				<div className={style['unit-option-label-div']}>
+					{extraSpace}
+					<span className={style['unit-option-points-label-greyed-out']}>{
+						parseInt(props.magicItem.points)}
+					</span>
+				</div>
+				<div className={style['unit-option-label-div']}>
+					<span className={className}>{props.magicItem.display_name}</span>
+				</div>
+			</div>	
+	}
+
 	return (
-		<div className={style['unit-option-selection-tile-row']} id={parseInt(props.magicItem.id)}>
-			<div className={style['unit-option-label-div']}>
-				{extraSpace}
-				<span className={style['magic-item-points-label-wmr']}>{props.magicItem.points}</span>
-			</div>
-			<div className={style['unit-option-label-div']}>
-				<span
-					onClick={() => props.updateHighlightedMagicItems(props.magicItem)}				
-					className={className}
-					id={parseInt(props.magicItem.id)}
-				>
-					{countDisplay}{props.magicItem.display_name}
-				</span>
-			</div>
-		</div>
+		<div>{display}</div>
 	)
 }
 

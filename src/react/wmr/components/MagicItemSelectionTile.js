@@ -41,6 +41,11 @@ class MagicItemSelectionTile extends Component {
 				highlightedMagicItems.splice(highlightedMagicItems.indexOf(highlightedMagicItems[i2]), 1)
 			}
 		}
+		for (i2 = highlightedMagicItems.length - 1; i2 >= 0; i2--) {
+			if (!this.props.determineIfValidAfterPointIncrease(parseInt(highlightedMagicItems[i2].magicItem.points) * highlightedMagicItems[i2].count)) {
+				highlightedMagicItems.splice(highlightedMagicItems.indexOf(highlightedMagicItems[i2]), 1)
+			}
+		}
 		if (totalCount > this.props.unitObject.count) {
 			for (i2 = highlightedMagicItems.length - 1; i2 >= 0; i2--) {
 				if (highlightedMagicItems[i2].magicItem.name === magicItem.name) {
@@ -123,8 +128,14 @@ class MagicItemSelectionTile extends Component {
 		}
 
 		let magicStandardDisplay = magicStandards.map(magicItem => {
+			let greyedOut = false
 			let highlighted = false
 			let count = 0
+
+			if (!this.props.determineIfValidAfterPointIncrease(parseInt(magicItem.points))) {
+				greyedOut = true
+			}
+
 			for (i2 = 0; i2 < highlightedMagicItems.length; i2++) {
 				if (highlightedMagicItems[i2].magicItem.name === magicItem.name) {
 					highlighted = true
@@ -138,14 +149,22 @@ class MagicItemSelectionTile extends Component {
 					unitObject={unitObject}
 					magicItem={magicItem}
 					updateHighlightedMagicItems={this.updateHighlightedMagicItems}
+					greyedOut={greyedOut}
 					highlighted={highlighted}
 					count={count}
 				/>
 			)
 		})
+
 		let magicWeaponDisplay = magicWeapons.map(magicItem => {
+			let greyedOut = false
 			let highlighted = false
 			let count = 0
+
+			if (!this.props.determineIfValidAfterPointIncrease(parseInt(magicItem.points))) {
+				greyedOut = true
+			}
+
 			for (i2 = 0; i2 < highlightedMagicItems.length; i2++) {
 				if (highlightedMagicItems[i2].magicItem.name === magicItem.name) {
 					highlighted = true
@@ -159,14 +178,22 @@ class MagicItemSelectionTile extends Component {
 					unitObject={unitObject}
 					magicItem={magicItem}
 					updateHighlightedMagicItems={this.updateHighlightedMagicItems}
+					greyedOut={greyedOut}
 					highlighted={highlighted}
 					count={count}
 				/>
 			)
 		})
+
 		let deviceOfPowerDisplay = devicesOfPower.map(magicItem => {
+			let greyedOut = false
 			let highlighted = false
 			let count = 0
+
+			if (!this.props.determineIfValidAfterPointIncrease(parseInt(magicItem.points))) {
+				greyedOut = true
+			}
+
 			for (i2 = 0; i2 < highlightedMagicItems.length; i2++) {
 				if (highlightedMagicItems[i2].magicItem.name === magicItem.name) {
 					highlighted = true
@@ -180,6 +207,7 @@ class MagicItemSelectionTile extends Component {
 					unitObject={unitObject}
 					magicItem={magicItem}
 					updateHighlightedMagicItems={this.updateHighlightedMagicItems}
+					greyedOut={greyedOut}
 					highlighted={highlighted}
 					count={count}
 				/>
