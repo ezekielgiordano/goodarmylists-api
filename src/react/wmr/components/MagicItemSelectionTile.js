@@ -191,10 +191,12 @@ class MagicItemSelectionTile extends Component {
 			if (unitObject.count > 1) {
 				question = `What Magic Item(s) will be given to ${unitObject.unit.option_screen_name}?`
 			} else {
-				question = `What Magic Item(s) will be given to ${unitObject.unit.singular_name}?`
+				question = `What Magic Item will be given to the ${unitObject.unit.list_name}?`
 			}
+		} else if (unitObject.unit.unit_type === 'General') {
+			question = `What Magic Item will be given to ${unitObject.unit.option_screen_name}?`
 		} else {
-			question = `What Magic Item(s) will be given to ${unitObject.unit.option_screen_name}?`
+			question = `What Magic Item(s) will be given to the ${unitObject.unit.option_screen_name}?`
 		}
 
 		return (

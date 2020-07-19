@@ -21,21 +21,21 @@ class HighElvesContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
-						display_name: 'Skeleton unit',
-						option_screen_name: 'Skeletons',
-						list_name: 'Skeletons',
+						wmr_army_id: 5,
+						name: 'Spearmen (High Elves)',
+						display_name: 'Spearman unit',
+						option_screen_name: 'Spearmen',
+						list_name: 'Spearmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '2',
+						attacks: '3',
 						hits: '3',
-						armor: '6+',
+						armor: '5+',
 						command: '-',
 						unit_size: '3',
-						points: 30,
+						points: 60,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -44,26 +44,26 @@ class HighElvesContainer extends Component {
 					}
 				},
 				{
-					count: 2,
+					count: 1,
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
+						wmr_army_id: 5,
+						name: 'Archers (High Elves)',
+						display_name: 'Archer unit',
+						option_screen_name: 'Archers',
+						list_name: 'Archers',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 2,
-						attacks: '2/1',
+						attacks: '3/1',
 						hits: '3',
-						armor: '0',
+						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
-						minimum: 2,
+						points: 75,
+						minimum: 1,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -75,24 +75,24 @@ class HighElvesContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 5,
+						name: 'General (High Elves)',
+						display_name: 'General',
+						option_screen_name: 'the General',
+						list_name: 'General',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 10,
+						order_within_army: 9,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
-						command: '9',
+						command: '10',
 						unit_size: '1',
-						points: 130,
+						points: 180,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -100,8 +100,8 @@ class HighElvesContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 280,
-			unitCount: 5,
+			pointTotal: 375,
+			unitCount: 4,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -132,18 +132,18 @@ class HighElvesContainer extends Component {
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
 		let wouldBeMaximumCount = 0
-		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let spearmanCount = 0
+		let archerCount = 0
 		let locked = false
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (unitArray[i2].unit.name === 'Skeletons (Tomb Kings)') {
-				skeletonCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Spearmen (High Elves)') {
+				spearmanCount += unitArray[i2].count
 			}	
-			if (unitArray[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Archers (High Elves)') {
+				archerCount += unitArray[i2].count
 			}			
 		}	
 
@@ -170,16 +170,24 @@ class HighElvesContainer extends Component {
 			}
 
 			if (
-				skeletonCount < wouldBeMaximumCount * 2 ||
-				skeletonBowmanCount < wouldBeMaximumCount * 2
+				spearmanCount < wouldBeMaximumCount * 2 ||
+				archerCount < wouldBeMaximumCount
 			) {
 				locked = true
 			}
-			if (
-				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
-				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
-			) {
-				locked = false
+			if (unitsInArmy[i2].name === 'Spearmen (High Elves)') {
+				if (archerCount < wouldBeMaximumCount) {
+					locked = true
+				} else {
+					locked = false
+				}
+			}
+			if (unitsInArmy[i2].name === 'Archers (High Elves)') {
+				if (spearmanCount < wouldBeMaximumCount * 2 ) {
+					locked = true
+				} else {
+					locked = false
+				}
 			}
 			if (locked === true) {
 				greyedOutUnits.push(unitsInArmy[i2])
@@ -210,7 +218,7 @@ class HighElvesContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -221,38 +229,40 @@ class HighElvesContainer extends Component {
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
 		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
-		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let spearmanCount = 0
+		let archerCount = 0
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === 'Skeletons (Tomb Kings)') {
-				skeletonCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Spearmen (High Elves)') {
+				spearmanCount += listedUnits[i2].count
 			}	
-			if (listedUnits[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Archers (High Elves)') {
+				archerCount += listedUnits[i2].count
 			}			
 		}
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
-				if (
-					unitToRemove.unit.name === 'Skeletons (Tomb Kings)' ||
-					unitToRemove.unit.name === 'Skeleton Bowmen (Tomb Kings)'
-				) {
+				if (unitToRemove.unit.name === 'Spearmen (High Elves)') {
 					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
+				if (unitToRemove.unit.name === 'Archers (High Elves)') {
+					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount) {
+						listedUnits[i2].count -= 1
+					}
+				}
 				if (
-					unitToRemove.unit.name !== 'Skeletons (Tomb Kings)' &&
-					unitToRemove.unit.name !== 'Skeleton Bowmen (Tomb Kings)' &&
+					unitToRemove.unit.name !== 'Spearmen (High Elves)' &&
+					unitToRemove.unit.name !== 'Archers (High Elves)' &&
 					unitToRemove.unit.unit_type !== 'General'
 				) {
 					if (
-						skeletonCount >= wouldBeMaximumCount * 2 &&
-						skeletonBowmanCount >= wouldBeMaximumCount * 2
+						spearmanCount >= wouldBeMaximumCount * 2 &&
+						archerCount >= wouldBeMaximumCount
 					) {
 						if (listedUnits[i2].count > 1) {
 							listedUnits[i2].count -= 1
@@ -283,7 +293,7 @@ class HighElvesContainer extends Component {
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -304,7 +314,7 @@ class HighElvesContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -330,7 +340,7 @@ class HighElvesContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries)
 		})
 	}
 
@@ -454,21 +464,21 @@ class HighElvesContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
-						display_name: 'Skeleton unit',
-						option_screen_name: 'Skeletons',
-						list_name: 'Skeletons',
+						wmr_army_id: 5,
+						name: 'Spearmen (High Elves)',
+						display_name: 'Spearman unit',
+						option_screen_name: 'Spearmen',
+						list_name: 'Spearmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '2',
+						attacks: '3',
 						hits: '3',
-						armor: '6+',
+						armor: '5+',
 						command: '-',
 						unit_size: '3',
-						points: 30,
+						points: 60,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -477,26 +487,26 @@ class HighElvesContainer extends Component {
 					}
 				},
 				{
-					count: 2,
+					count: 1,
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
+						wmr_army_id: 5,
+						name: 'Archers (High Elves)',
+						display_name: 'Archer unit',
+						option_screen_name: 'Archers',
+						list_name: 'Archers',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 2,
-						attacks: '2/1',
+						attacks: '3/1',
 						hits: '3',
-						armor: '0',
+						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
-						minimum: 2,
+						points: 75,
+						minimum: 1,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -508,24 +518,24 @@ class HighElvesContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 5,
+						name: 'General (High Elves)',
+						display_name: 'General',
+						option_screen_name: 'the General',
+						list_name: 'General',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 10,
+						order_within_army: 9,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
-						command: '9',
+						command: '10',
 						unit_size: '1',
-						points: 130,
+						points: 180,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -533,8 +543,8 @@ class HighElvesContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 280,
-			unitCount: 5,
+			pointTotal: 375,
+			unitCount: 4,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -564,6 +574,8 @@ class HighElvesContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>
@@ -578,6 +590,8 @@ class HighElvesContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>

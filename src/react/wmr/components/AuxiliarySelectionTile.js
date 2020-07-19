@@ -96,11 +96,15 @@ class AuxiliarySelectionTile extends Component {
 		})
 
 		let question
-		if (unitObject.unit.unit_type === 'Hero' || unitObject.unit.unit_type === 'Wizard') {
+		if (
+			unitObject.unit.unit_type === 'General' ||
+			unitObject.unit.unit_type === 'Hero' ||
+			unitObject.unit.unit_type === 'Wizard'
+		) {
 			if (unitObject.count > 1) {
 				question = `What option(s) will be given to ${unitObject.unit.option_screen_name}?`
 			} else {
-				question = `What option(s) will be given to the ${unitObject.unit.list_name}?`
+				question = `What option will be given to the ${unitObject.unit.list_name}?`
 			}
 		} else {
 			question = `What option(s) will be given to ${unitObject.unit.option_screen_name}?`

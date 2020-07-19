@@ -92,7 +92,7 @@ class TombKingsContainer extends Component {
 						points: 130,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -175,11 +175,19 @@ class TombKingsContainer extends Component {
 			) {
 				locked = true
 			}
-			if (
-				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
-				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
-			) {
-				locked = false
+			if (unitsInArmy[i2].name === 'Skeletons (Tomb Kings)') {
+				if (skeletonBowmanCount < wouldBeMaximumCount * 2) {
+					locked = true
+				} else {
+					locked = false
+				}
+			}
+			if (unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)') {
+				if (skeletonCount < wouldBeMaximumCount * 2) {
+					locked = true
+				} else {
+					locked = false
+				}
 			}
 			if (locked === true) {
 				greyedOutUnits.push(unitsInArmy[i2])
@@ -210,7 +218,7 @@ class TombKingsContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -283,7 +291,7 @@ class TombKingsContainer extends Component {
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -304,7 +312,7 @@ class TombKingsContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -330,7 +338,7 @@ class TombKingsContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries)
 		})
 	}
 
@@ -525,7 +533,7 @@ class TombKingsContainer extends Component {
 						points: 130,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -564,6 +572,8 @@ class TombKingsContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>
@@ -578,6 +588,8 @@ class TombKingsContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>
