@@ -54,7 +54,9 @@ const UnitOptionSelectionLabel = props => {
 			<div  className={style['unit-option-selection-tile-row-greyed-out']} id={parseInt(props.unitOption.id)}>
 				<div className={style['unit-option-label-div']}>
 					{extraSpace}
-					<span>{parseInt(props.unitOption.points)}</span>
+					<span className={style['unit-option-points-label-greyed-out']}>
+						{parseInt(props.unitOption.points)}
+					</span>
 				</div>
 				<div className={style['unit-option-label-div']}>
 					<span className={className}>{props.unitOption.display_name}</span>

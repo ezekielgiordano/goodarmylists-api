@@ -84,6 +84,7 @@ class DemonsContainer extends Component {
 			unitBeingGivenMagicItem: ''
 		}
 		this.determineIfGreyedOut = this.determineIfGreyedOut.bind(this)
+		this.determineIfValidAfterPointIncrease = this.determineIfValidAfterPointIncrease.bind(this)
 		this.addUnit = this.addUnit.bind(this)
 		this.removeUnit = this.removeUnit.bind(this)
 		this.addAuxiliary = this.addAuxiliary.bind(this)
@@ -151,6 +152,30 @@ class DemonsContainer extends Component {
 		}
 
 		return greyedOutUnits
+	}
+
+	determineIfValidAfterPointIncrease(pointIncrease) {
+		let maximumCountBefore = this.props.calculateMaximumCount(this.state.pointTotal)
+		let maximumCountAfter = this.props.calculateMaximumCount(this.state.pointTotal + pointIncrease)
+		let valid
+		if (maximumCountBefore === maximumCountAfter) {
+			valid = true
+		} else {
+			let listedUnits = this.state.listedUnits
+			let demonHordeCount = 0
+			let i2
+			for (i2 = 0; i2 < listedUnits.length; i2++) {
+				if (listedUnits[i2].unit.name === 'Demon Hordes (Demons)') {
+					demonHordeCount += listedUnits[i2].count
+				}				
+			}
+			if (demonHordeCount > maximumCountAfter * 3) {
+				valid = false
+			} else {
+				valid = true
+			}
+		}
+		return valid
 	}
 
 	addUnit(unitToAdd) {
@@ -489,9 +514,7 @@ class DemonsContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}		
@@ -505,9 +528,7 @@ class DemonsContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
-						calculateMaximumCount={this.props.calculateMaximumCount}
-						determineIfGreyedOut={this.determineIfGreyedOut}
-						pointTotal={this.state.pointTotal}
+						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
 					/>
 				</div>
 		}

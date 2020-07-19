@@ -542,6 +542,10 @@ hr {
 	color: #949391;
 }
 
+.unit-option-points-label-greyed-out {
+	margin: 0px 15px 0px 2px;
+}
+
 .unit-option-label-div {
 	display: table-cell;
 	height: 100%;

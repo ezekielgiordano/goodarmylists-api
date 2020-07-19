@@ -43,7 +43,11 @@ class AuxiliarySelectionTile extends Component {
 			) {
 				highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 			}
-
+		}
+		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
+			if (!this.props.determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count)) {
+				highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
+			}
 		}
 		if (totalCount > this.props.unitObject.count) { 
 			for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
@@ -73,14 +77,21 @@ class AuxiliarySelectionTile extends Component {
 		})
 
 		let auxiliaryDisplay = auxiliaries.map(auxiliary => {
+			let greyedOut = false
 			let highlighted = false
 			let count = 0
+
+			if (!this.props.determineIfValidAfterPointIncrease(parseInt(auxiliary.points))) {
+				greyedOut = true
+			}
+
 			for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
 				if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
 					highlighted = true
 					count = highlightedAuxiliaries[i2].count
 				}
 			}
+
 
 			return (
 				<AuxiliarySelectionLabel
@@ -89,6 +100,7 @@ class AuxiliarySelectionTile extends Component {
 					unitObject={unitObject}
 					auxiliary={auxiliary}
 					updateHighlightedAuxiliaries={this.updateHighlightedAuxiliaries}
+					greyedOut={greyedOut}
 					highlighted={highlighted}
 					count={count}
 				/>
