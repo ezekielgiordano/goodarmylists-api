@@ -18,10 +18,14 @@ games_json = games_array.to_json
 # Kings of War
 
 kow_armies = data.exec('SELECT * FROM kow_armies;')
-kow_armies_array = []
+unsorted_kow_armies_array = []
 kow_armies.each do |row|
-	kow_armies_array << row
+	unsorted_kow_armies_array << row
 end
+kow_armies_array = unsorted_kow_armies_array.sort {
+            |x, y| x['name'].sub(/^(A|An|The)\s/i, "").downcase <=>
+            y['name'].sub(/^(A|An|The)\s/i, "").downcase
+        }
 kow_armies_json = kow_armies_array.to_json
 
 kow_units = data.exec('SELECT * FROM kow_units;')
@@ -48,10 +52,14 @@ kow_artifacts_json = kow_artifacts_array.to_json
 # Warmaster Reform
 
 wmr_armies = data.exec('SELECT * FROM wmr_armies;')
-wmr_armies_array = []
+unsorted_wmr_armies_array = []
 wmr_armies.each do |row|
-	wmr_armies_array << row
+	unsorted_wmr_armies_array << row
 end
+wmr_armies_array = unsorted_wmr_armies_array.sort {
+            |x, y| x['display_name'].sub(/^(A|An|The)\s/i, "").downcase <=>
+            y['display_name'].sub(/^(A|An|The)\s/i, "").downcase
+        }
 wmr_armies_json = wmr_armies_array.to_json
 
 wmr_generals = data.exec('SELECT * FROM wmr_generals;')

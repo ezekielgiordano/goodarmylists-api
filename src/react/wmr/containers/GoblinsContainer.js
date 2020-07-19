@@ -17,26 +17,26 @@ class GoblinsContainer extends Component {
 		this.state = {
 			listedUnits: [
 				{
-					count: 2,
+					count: 4,
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
-						display_name: 'Skeleton unit',
-						option_screen_name: 'Skeletons',
-						list_name: 'Skeletons',
+						wmr_army_id: 18,
+						name: 'Goblins (Goblins)',
+						display_name: 'Goblin unit',
+						option_screen_name: 'Goblins',
+						list_name: 'Goblins',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '2',
+						attacks: '2/1',
 						hits: '3',
-						armor: '6+',
+						armor: '0',
 						command: '-',
 						unit_size: '3',
 						points: 30,
-						minimum: 2,
+						minimum: 4,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -48,21 +48,21 @@ class GoblinsContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
-						unit_type: 'Infantry',
-						unit_type_index: 1,
+						wmr_army_id: 18,
+						name: 'Wolf Riders (Goblins)',
+						display_name: 'Wolf Rider unit',
+						option_screen_name: 'Wolf Riders',
+						list_name: 'Wolf Riders',
+						unit_type: 'Cavalry',
+						unit_type_index: 2,
 						is_unique: false,
-						order_within_army: 2,
+						order_within_army: 4,
 						attacks: '2/1',
 						hits: '3',
-						armor: '0',
+						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 60,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -75,24 +75,24 @@ class GoblinsContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 18,
+						name: 'Goblin Warboss (Goblins)',
+						display_name: 'Goblin Warboss',
+						option_screen_name: 'the Goblin Warboss',
+						list_name: 'Goblin Warboss',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
 						order_within_army: 10,
-						attacks: '+2',
+						attacks: '+1',
 						hits: '-',
 						armor: '-',
-						command: '9',
+						command: '8',
 						unit_size: '1',
-						points: 130,
+						points: 80,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -100,8 +100,8 @@ class GoblinsContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 280,
-			unitCount: 5,
+			pointTotal: 320,
+			unitCount: 7,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -132,18 +132,18 @@ class GoblinsContainer extends Component {
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
 		let wouldBeMaximumCount = 0
-		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let goblinCount = 0
+		let wolfRiderCount = 0
 		let locked = false
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (unitArray[i2].unit.name === 'Skeletons (Tomb Kings)') {
-				skeletonCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Goblins (Goblins)') {
+				goblinCount += unitArray[i2].count
 			}	
-			if (unitArray[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Wolf Riders (Goblins)') {
+				wolfRiderCount += unitArray[i2].count
 			}			
 		}	
 
@@ -170,16 +170,24 @@ class GoblinsContainer extends Component {
 			}
 
 			if (
-				skeletonCount < wouldBeMaximumCount * 2 ||
-				skeletonBowmanCount < wouldBeMaximumCount * 2
+				goblinCount < wouldBeMaximumCount * 4 ||
+				wolfRiderCount < wouldBeMaximumCount * 2
 			) {
 				locked = true
 			}
-			if (
-				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
-				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
-			) {
-				locked = false
+			if (unitsInArmy[i2].name === 'Goblins (Goblins)') {
+				if (wolfRiderCount < wouldBeMaximumCount * 2) {
+					locked = true
+				} else {
+					locked = false
+				}
+			}
+			if (unitsInArmy[i2].name === 'Wolf Riders (Goblins)') {
+				if (goblinCount < wouldBeMaximumCount * 4) {
+					locked = true
+				} else {
+					locked = false
+				}
 			}
 			if (locked === true) {
 				greyedOutUnits.push(unitsInArmy[i2])
@@ -210,7 +218,7 @@ class GoblinsContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -221,38 +229,40 @@ class GoblinsContainer extends Component {
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
 		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
-		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let goblinCount = 0
+		let wolfRiderCount = 0
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === 'Skeletons (Tomb Kings)') {
-				skeletonCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Goblins (Goblins)') {
+				goblinCount += listedUnits[i2].count
 			}	
-			if (listedUnits[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Wolf Riders (Goblins)') {
+				wolfRiderCount += listedUnits[i2].count
 			}			
 		}
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
-				if (
-					unitToRemove.unit.name === 'Skeletons (Tomb Kings)' ||
-					unitToRemove.unit.name === 'Skeleton Bowmen (Tomb Kings)'
-				) {
+				if (unitToRemove.unit.name === 'Goblins (Goblins)') {
+					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 4) {
+						listedUnits[i2].count -= 1
+					}
+				}
+				if (unitToRemove.unit.name === 'Wolf Riders (Goblins)') {
 					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
 				if (
-					unitToRemove.unit.name !== 'Skeletons (Tomb Kings)' &&
-					unitToRemove.unit.name !== 'Skeleton Bowmen (Tomb Kings)' &&
+					unitToRemove.unit.name !== 'Goblins (Goblins)' &&
+					unitToRemove.unit.name !== 'Wolf Riders (Goblins)' &&
 					unitToRemove.unit.unit_type !== 'General'
 				) {
 					if (
-						skeletonCount >= wouldBeMaximumCount * 2 &&
-						skeletonBowmanCount >= wouldBeMaximumCount * 2
+						goblinCount >= wouldBeMaximumCount * 4 &&
+						wolfRiderCount >= wouldBeMaximumCount * 2
 					) {
 						if (listedUnits[i2].count > 1) {
 							listedUnits[i2].count -= 1
@@ -283,7 +293,7 @@ class GoblinsContainer extends Component {
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -304,7 +314,7 @@ class GoblinsContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -330,7 +340,7 @@ class GoblinsContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries)
 		})
 	}
 
@@ -450,26 +460,26 @@ class GoblinsContainer extends Component {
 		this.setState({
 			listedUnits: [
 				{
-					count: 2,
+					count: 4,
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
-						display_name: 'Skeleton unit',
-						option_screen_name: 'Skeletons',
-						list_name: 'Skeletons',
+						wmr_army_id: 18,
+						name: 'Goblins (Goblins)',
+						display_name: 'Goblin unit',
+						option_screen_name: 'Goblins',
+						list_name: 'Goblins',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '2',
+						attacks: '2/1',
 						hits: '3',
-						armor: '6+',
+						armor: '0',
 						command: '-',
 						unit_size: '3',
 						points: 30,
-						minimum: 2,
+						minimum: 4,
 						maximum: null,
 						special_rules: '-',
 						can_have_aux: false,
@@ -481,21 +491,21 @@ class GoblinsContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
-						unit_type: 'Infantry',
-						unit_type_index: 1,
+						wmr_army_id: 18,
+						name: 'Wolf Riders (Goblins)',
+						display_name: 'Wolf Rider unit',
+						option_screen_name: 'Wolf Riders',
+						list_name: 'Wolf Riders',
+						unit_type: 'Cavalry',
+						unit_type_index: 2,
 						is_unique: false,
-						order_within_army: 2,
+						order_within_army: 4,
 						attacks: '2/1',
 						hits: '3',
-						armor: '0',
+						armor: '6+',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 60,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -508,24 +518,24 @@ class GoblinsContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 18,
+						name: 'Goblin Warboss (Goblins)',
+						display_name: 'Goblin Warboss',
+						option_screen_name: 'the Goblin Warboss',
+						list_name: 'Goblin Warboss',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
 						order_within_army: 10,
-						attacks: '+2',
+						attacks: '+1',
 						hits: '-',
 						armor: '-',
-						command: '9',
+						command: '8',
 						unit_size: '1',
-						points: 130,
+						points: 80,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -533,8 +543,8 @@ class GoblinsContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 280,
-			unitCount: 5,
+			pointTotal: 320,
+			unitCount: 7,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -564,6 +574,8 @@ class GoblinsContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>
@@ -578,6 +590,8 @@ class GoblinsContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>

@@ -21,48 +21,21 @@ class NorseContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
-						display_name: 'Skeleton unit',
-						option_screen_name: 'Skeletons',
-						list_name: 'Skeletons',
+						wmr_army_id: 23,
+						name: 'Bondsmen (Norse)',
+						display_name: 'Bondsman unit',
+						option_screen_name: 'Bondsmen',
+						list_name: 'Bondsmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '2',
+						attacks: '3',
 						hits: '3',
-						armor: '6+',
+						armor: '5+',
 						command: '-',
 						unit_size: '3',
-						points: 30,
-						minimum: 2,
-						maximum: null,
-						special_rules: '-',
-						can_have_aux: false,
-						can_have_mag: true
-					}
-				},
-				{
-					count: 2,
-					unit: {
-						id: 3,
-						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
-						unit_type: 'Infantry',
-						unit_type_index: 1,
-						is_unique: false,
-						order_within_army: 2,
-						attacks: '2/1',
-						hits: '3',
-						armor: '0',
-						command: '-',
-						unit_size: '3',
-						points: 45,
+						points: 60,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -73,13 +46,40 @@ class NorseContainer extends Component {
 				{
 					count: 1,
 					unit: {
+						id: 3,
+						game_id: 2,
+						wmr_army_id: 23,
+						name: 'Huscarls (Norse)',
+						display_name: 'Huscarl unit',
+						option_screen_name: 'Huscarls',
+						list_name: 'Huscarls',
+						unit_type: 'Infantry',
+						unit_type_index: 1,
+						is_unique: false,
+						order_within_army: 2,
+						attacks: '4',
+						hits: '3',
+						armor: '4+',
+						command: '-',
+						unit_size: '3',
+						points: 100,
+						minimum: 1,
+						maximum: 4,
+						special_rules: '-',
+						can_have_aux: false,
+						can_have_mag: true
+					}
+				},
+				{
+					count: 1,
+					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 23,
+						name: 'Jarl (Norse)',
+						display_name: 'Jarl',
+						option_screen_name: 'the Jarl',
+						list_name: 'Jarl',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
@@ -89,10 +89,10 @@ class NorseContainer extends Component {
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 130,
+						points: 125,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -100,8 +100,8 @@ class NorseContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 280,
-			unitCount: 5,
+			pointTotal: 345,
+			unitCount: 4,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -132,18 +132,18 @@ class NorseContainer extends Component {
 		let greyedOutUnits = []
 		let pointTotal = this.state.pointTotal
 		let wouldBeMaximumCount = 0
-		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let bondsmanCount = 0
+		let huscarlCount = 0
 		let locked = false
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (unitArray[i2].unit.name === 'Skeletons (Tomb Kings)') {
-				skeletonCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Bondsmen (Norse)') {
+				bondsmanCount += unitArray[i2].count
 			}	
-			if (unitArray[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Huscarls (Norse)') {
+				huscarlCount += unitArray[i2].count
 			}			
 		}	
 
@@ -170,16 +170,24 @@ class NorseContainer extends Component {
 			}
 
 			if (
-				skeletonCount < wouldBeMaximumCount * 2 ||
-				skeletonBowmanCount < wouldBeMaximumCount * 2
+				bondsmanCount < wouldBeMaximumCount * 2 ||
+				huscarlCount < wouldBeMaximumCount
 			) {
 				locked = true
 			}
-			if (
-				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
-				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
-			) {
-				locked = false
+			if (unitsInArmy[i2].name === 'Bondsmen (Norse)') {
+				if (huscarlCount < wouldBeMaximumCount) {
+					locked = true
+				} else {
+					locked = false
+				}
+			}
+			if (unitsInArmy[i2].name === 'Huscarls (Norse)') {
+				if (bondsmanCount < wouldBeMaximumCount * 2) {
+					locked = true
+				} else {
+					locked = false
+				}
 			}
 			if (locked === true) {
 				greyedOutUnits.push(unitsInArmy[i2])
@@ -210,7 +218,7 @@ class NorseContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -221,38 +229,40 @@ class NorseContainer extends Component {
 		let selectedAuxiliaries = this.state.selectedAuxiliaries
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
 		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
-		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let bondsmanCount = 0
+		let huscarlCount = 0
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === 'Skeletons (Tomb Kings)') {
-				skeletonCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Bondsmen (Norse)') {
+				bondsmanCount += listedUnits[i2].count
 			}	
-			if (listedUnits[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Huscarls (Norse)') {
+				huscarlCount += listedUnits[i2].count
 			}			
 		}
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
-				if (
-					unitToRemove.unit.name === 'Skeletons (Tomb Kings)' ||
-					unitToRemove.unit.name === 'Skeleton Bowmen (Tomb Kings)'
-				) {
+				if (unitToRemove.unit.name === 'Bondsmen (Norse)') {
 					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
+				if (unitToRemove.unit.name === 'Huscarls (Norse)') {
+					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount) {
+						listedUnits[i2].count -= 1
+					}
+				}
 				if (
-					unitToRemove.unit.name !== 'Skeletons (Tomb Kings)' &&
-					unitToRemove.unit.name !== 'Skeleton Bowmen (Tomb Kings)' &&
+					unitToRemove.unit.name !== 'Bondsmen (Norse)' &&
+					unitToRemove.unit.name !== 'Huscarls (Norse)' &&
 					unitToRemove.unit.unit_type !== 'General'
 				) {
 					if (
-						skeletonCount >= wouldBeMaximumCount * 2 &&
-						skeletonBowmanCount >= wouldBeMaximumCount * 2
+						bondsmanCount >= wouldBeMaximumCount * 2 &&
+						huscarlCount >= wouldBeMaximumCount
 					) {
 						if (listedUnits[i2].count > 1) {
 							listedUnits[i2].count -= 1
@@ -283,7 +293,7 @@ class NorseContainer extends Component {
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -304,7 +314,7 @@ class NorseContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -330,7 +340,7 @@ class NorseContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries)
 		})
 	}
 
@@ -454,48 +464,21 @@ class NorseContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
-						display_name: 'Skeleton unit',
-						option_screen_name: 'Skeletons',
-						list_name: 'Skeletons',
+						wmr_army_id: 23,
+						name: 'Bondsmen (Norse)',
+						display_name: 'Bondsman unit',
+						option_screen_name: 'Bondsmen',
+						list_name: 'Bondsmen',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 1,
-						attacks: '2',
+						attacks: '3',
 						hits: '3',
-						armor: '6+',
+						armor: '5+',
 						command: '-',
 						unit_size: '3',
-						points: 30,
-						minimum: 2,
-						maximum: null,
-						special_rules: '-',
-						can_have_aux: false,
-						can_have_mag: true
-					}
-				},
-				{
-					count: 2,
-					unit: {
-						id: 3,
-						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
-						unit_type: 'Infantry',
-						unit_type_index: 1,
-						is_unique: false,
-						order_within_army: 2,
-						attacks: '2/1',
-						hits: '3',
-						armor: '0',
-						command: '-',
-						unit_size: '3',
-						points: 45,
+						points: 60,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -506,13 +489,40 @@ class NorseContainer extends Component {
 				{
 					count: 1,
 					unit: {
+						id: 3,
+						game_id: 2,
+						wmr_army_id: 23,
+						name: 'Huscarls (Norse)',
+						display_name: 'Huscarl unit',
+						option_screen_name: 'Huscarls',
+						list_name: 'Huscarls',
+						unit_type: 'Infantry',
+						unit_type_index: 1,
+						is_unique: false,
+						order_within_army: 2,
+						attacks: '4',
+						hits: '3',
+						armor: '4+',
+						command: '-',
+						unit_size: '3',
+						points: 100,
+						minimum: 1,
+						maximum: 4,
+						special_rules: '-',
+						can_have_aux: false,
+						can_have_mag: true
+					}
+				},
+				{
+					count: 1,
+					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 23,
+						name: 'Jarl (Norse)',
+						display_name: 'Jarl',
+						option_screen_name: 'the Jarl',
+						list_name: 'Jarl',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
@@ -522,10 +532,10 @@ class NorseContainer extends Component {
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 130,
+						points: 125,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -533,8 +543,8 @@ class NorseContainer extends Component {
 			],
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
-			pointTotal: 280,
-			unitCount: 5,
+			pointTotal: 345,
+			unitCount: 4,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -564,6 +574,8 @@ class NorseContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>
@@ -578,6 +590,8 @@ class NorseContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>

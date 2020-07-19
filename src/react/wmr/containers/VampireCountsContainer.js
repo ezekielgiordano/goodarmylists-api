@@ -21,8 +21,8 @@ class VampireCountsContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
+						wmr_army_id: 14,
+						name: 'Skeletons (Vampire Counts)',
 						display_name: 'Skeleton unit',
 						option_screen_name: 'Skeletons',
 						list_name: 'Skeletons',
@@ -48,21 +48,21 @@ class VampireCountsContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
+						wmr_army_id: 14,
+						name: 'Zombies (Vampire Counts)',
+						display_name: 'Zombie unit',
+						option_screen_name: 'Zombies',
+						list_name: 'Zombies',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 2,
-						attacks: '2/1',
-						hits: '3',
+						attacks: '2',
+						hits: '4',
 						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 35,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -75,24 +75,24 @@ class VampireCountsContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 14,
+						name: 'Vampire Lord (Vampire Counts)',
+						display_name: 'Vampire Lord',
+						option_screen_name: 'the Vampire Lord',
+						list_name: 'Vampire Lord',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 10,
+						order_within_army: 9,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 130,
+						points: 150,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -133,17 +133,17 @@ class VampireCountsContainer extends Component {
 		let pointTotal = this.state.pointTotal
 		let wouldBeMaximumCount = 0
 		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let zombieCount = 0
 		let locked = false
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < unitArray.length; i2++) {
-			if (unitArray[i2].unit.name === 'Skeletons (Tomb Kings)') {
+			if (unitArray[i2].unit.name === 'Skeletons (Vampire Counts)') {
 				skeletonCount += unitArray[i2].count
 			}	
-			if (unitArray[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += unitArray[i2].count
+			if (unitArray[i2].unit.name === 'Zombies (Vampire Counts)') {
+				zombieCount += unitArray[i2].count
 			}			
 		}	
 
@@ -171,15 +171,23 @@ class VampireCountsContainer extends Component {
 
 			if (
 				skeletonCount < wouldBeMaximumCount * 2 ||
-				skeletonBowmanCount < wouldBeMaximumCount * 2
+				zombieCount < wouldBeMaximumCount * 2
 			) {
 				locked = true
 			}
-			if (
-				unitsInArmy[i2].name === 'Skeletons (Tomb Kings)' ||
-				unitsInArmy[i2].name === 'Skeleton Bowmen (Tomb Kings)'
-			) {
-				locked = false
+			if (unitsInArmy[i2].name === 'Skeletons (Vampire Counts)') {
+				if (zombieCount < wouldBeMaximumCount * 2) {
+					locked = true
+				} else {
+					locked = false
+				}
+			}
+			if (unitsInArmy[i2].name === 'Zombies (Vampire Counts)') {
+				if (skeletonCount < wouldBeMaximumCount * 2) {
+					locked = true
+				} else {
+					locked = false
+				}
 			}
 			if (locked === true) {
 				greyedOutUnits.push(unitsInArmy[i2])
@@ -210,7 +218,7 @@ class VampireCountsContainer extends Component {
 		this.setState({
 			listedUnits: listedUnits,
 			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(this.state.selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(this.state.selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -222,37 +230,37 @@ class VampireCountsContainer extends Component {
 		let wouldBePointTotal = this.state.pointTotal - parseInt(unitToRemove.unit.points)
 		let wouldBeMaximumCount = this.props.calculateMaximumCount(wouldBePointTotal)
 		let skeletonCount = 0
-		let skeletonBowmanCount = 0
+		let zombieCount = 0
 		let i2
 		let i3
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
-			if (listedUnits[i2].unit.name === 'Skeletons (Tomb Kings)') {
+			if (listedUnits[i2].unit.name === 'Skeletons (Vampire Counts)') {
 				skeletonCount += listedUnits[i2].count
 			}	
-			if (listedUnits[i2].unit.name === 'Skeleton Bowmen (Tomb Kings)') {
-				skeletonBowmanCount += listedUnits[i2].count
+			if (listedUnits[i2].unit.name === 'Zombies (Vampire Counts)') {
+				zombieCount += listedUnits[i2].count
 			}			
 		}
 
 		for (i2 = 0; i2 < listedUnits.length; i2++) {
 			if (listedUnits[i2].unit.name === unitToRemove.unit.name) {
 				if (
-					unitToRemove.unit.name === 'Skeletons (Tomb Kings)' ||
-					unitToRemove.unit.name === 'Skeleton Bowmen (Tomb Kings)'
+					unitToRemove.unit.name === 'Skeletons (Vampire Counts)' ||
+					unitToRemove.unit.name === 'Zombies (Vampire Counts)'
 				) {
 					if (listedUnits[i2].count - 1 >= wouldBeMaximumCount * 2) {
 						listedUnits[i2].count -= 1
 					}
 				}
 				if (
-					unitToRemove.unit.name !== 'Skeletons (Tomb Kings)' &&
-					unitToRemove.unit.name !== 'Skeleton Bowmen (Tomb Kings)' &&
+					unitToRemove.unit.name !== 'Skeletons (Vampire Counts)' &&
+					unitToRemove.unit.name !== 'Zombies (Vampire Counts)' &&
 					unitToRemove.unit.unit_type !== 'General'
 				) {
 					if (
 						skeletonCount >= wouldBeMaximumCount * 2 &&
-						skeletonBowmanCount >= wouldBeMaximumCount * 2
+						zombieCount >= wouldBeMaximumCount * 2
 					) {
 						if (listedUnits[i2].count > 1) {
 							listedUnits[i2].count -= 1
@@ -283,7 +291,7 @@ class VampireCountsContainer extends Component {
 			listedUnits: listedUnits,
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -304,7 +312,7 @@ class VampireCountsContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries),
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries),
 			unitBeingGivenAuxiliary: '',
 		})
 		this.toggleAuxiliaries()
@@ -330,7 +338,7 @@ class VampireCountsContainer extends Component {
 		this.setState({
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(this.state.listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
-			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateUnitCount(selectedAuxiliaries)
+			unitCount: this.props.calculateUnitCount(this.state.listedUnits) + this.props.calculateMountCount(selectedAuxiliaries)
 		})
 	}
 
@@ -454,8 +462,8 @@ class VampireCountsContainer extends Component {
 					unit: {
 						id: 1,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeletons (Tomb Kings)',
+						wmr_army_id: 14,
+						name: 'Skeletons (Vampire Counts)',
 						display_name: 'Skeleton unit',
 						option_screen_name: 'Skeletons',
 						list_name: 'Skeletons',
@@ -481,21 +489,21 @@ class VampireCountsContainer extends Component {
 					unit: {
 						id: 3,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Skeleton Bowmen (Tomb Kings)',
-						display_name: 'Skeleton Bowman unit',
-						option_screen_name: 'Skeleton Bowmen',
-						list_name: 'Skeleton Bowmen',
+						wmr_army_id: 14,
+						name: 'Zombies (Vampire Counts)',
+						display_name: 'Zombie unit',
+						option_screen_name: 'Zombies',
+						list_name: 'Zombies',
 						unit_type: 'Infantry',
 						unit_type_index: 1,
 						is_unique: false,
 						order_within_army: 2,
-						attacks: '2/1',
-						hits: '3',
+						attacks: '2',
+						hits: '4',
 						armor: '0',
 						command: '-',
 						unit_size: '3',
-						points: 45,
+						points: 35,
 						minimum: 2,
 						maximum: null,
 						special_rules: '-',
@@ -508,24 +516,24 @@ class VampireCountsContainer extends Component {
 					unit: {
 						id: 1000000,
 						game_id: 2,
-						wmr_army_id: 2,
-						name: 'Tomb King (Tomb Kings)',
-						display_name: 'Tomb King',
-						option_screen_name: 'the Tomb King',
-						list_name: 'Tomb King',
+						wmr_army_id: 14,
+						name: 'Vampire Lord (Vampire Counts)',
+						display_name: 'Vampire Lord',
+						option_screen_name: 'the Vampire Lord',
+						list_name: 'Vampire Lord',
 						unit_type: 'General',
 						unit_type_index: 7,
 						is_unique: true,
-						order_within_army: 10,
+						order_within_army: 9,
 						attacks: '+2',
 						hits: '-',
 						armor: '-',
 						command: '9',
 						unit_size: '1',
-						points: 130,
+						points: 150,
 						minimum: 1,
 						maximum: 1,
-						special_rules: 'Once per battle the Tomb King can give +1 to the combat Attacks value of all the stands in one unit within 20cm for the duration of one Combat phase.',
+						special_rules: '-',
 						can_have_aux: true,
 						can_have_mag: true 
 					}
@@ -564,6 +572,8 @@ class VampireCountsContainer extends Component {
 						selectedAuxiliaries={this.state.selectedAuxiliaries}
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>
@@ -578,6 +588,8 @@ class VampireCountsContainer extends Component {
 						selectedMagicItems={this.state.selectedMagicItems}
 						addMagicItem={this.addMagicItem}
 						toggleMagicItems={this.toggleMagicItems}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						determineIfGreyedOut={this.determineIfGreyedOut}
 						pointTotal={this.state.pointTotal}
 					/>
 				</div>

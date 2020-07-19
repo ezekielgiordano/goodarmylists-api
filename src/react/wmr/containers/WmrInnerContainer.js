@@ -35,6 +35,7 @@ class WmrInnerContainer extends Component {
 		this.updateSelectedArmy = this.updateSelectedArmy.bind(this)
 		this.calculatePointTotal = this.calculatePointTotal.bind(this)
 		this.calculateUnitCount = this.calculateUnitCount.bind(this)
+		this.calculateMountCount = this.calculateMountCount.bind(this)
 		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
 		this.calculateMaximumCount = this.calculateMaximumCount.bind(this)
 	}
@@ -67,8 +68,27 @@ class WmrInnerContainer extends Component {
 		return count
 	}
 
+	calculateMountCount(array) {
+		let count = 0
+		// let i2
+		// for (i2 = 0; i2 < array.length; i2++) {
+		// 	if (
+		// 		array[i2].auxiliary.special_rules.includes('not independent') === false &&
+		// 		array[i2].auxiliary.name !== 'Grail Reliquae (Bretonnia)' &&
+		// 		array[i2].auxiliary.name !== 'Tzarina (Kislev)' &&
+		// 		array[i2].auxiliary.name !== 'Demonic Wings (Demons)' &&
+		// 		array[i2].auxiliary.name !== 'Favor of the Gods (Demons)' &&
+		// 		array[i2].auxiliary.name !== 'Sorcerer Lord (Chaos Dwarfs)' &&
+		// 		array[i2].auxiliary.name !== 'Were Kin (Norse)'
+		// 	) {
+		// 		count += array[i2].count
+		// 	}
+		// }
+		return count
+	}
+
 	calculateBreakPoint(unitArray, auxiliaryArray) {
-		let breakPoint = 0
+		let breakPointUnits = 0
 		let i2
 		for (i2 = 0; i2 < unitArray.length; i2++) {
 			if (
@@ -76,14 +96,10 @@ class WmrInnerContainer extends Component {
 				unitArray[i2].unit.unit_type !== 'Hero' &&
 				unitArray[i2].unit.unit_type !== 'Wizard'
 			) {
-				breakPoint += unitArray[i2].count
+				breakPointUnits += unitArray[i2].count
 			}
 		}
-		for (i2 = 0; i2 < auxiliaryArray.length; i2++) {
-			if (auxiliaryArray[i2].auxiliary.special_rules.includes('not independent')) {
-				breakPoint += auxiliaryArray[i2].count
-			}
-		}
+		let breakPoint = Math.floor(breakPointUnits / 2)
 		return breakPoint
 	}
 
@@ -103,9 +119,9 @@ class WmrInnerContainer extends Component {
 		let selectedArmy = this.state.selectedArmy
 		let armyOptions = []
 		let labeledArmy
-		let i
-		for (i = 0; i < this.props.armies.length; i++) {
-			labeledArmy = { value: this.props.armies[i], label: this.props.armies[i].display_name }
+		let i2
+		for (i2 = 0; i2 < this.props.armies.length; i2++) {
+			labeledArmy = { value: this.props.armies[i2], label: this.props.armies[i2].display_name }
 			armyOptions.push(labeledArmy)
 		}
 		
@@ -119,6 +135,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -132,6 +149,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -145,6 +163,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -158,6 +177,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -171,6 +191,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -184,6 +205,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -197,6 +219,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -210,6 +233,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -223,6 +247,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
 		}
@@ -235,6 +260,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -248,6 +274,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -261,6 +288,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -274,6 +302,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -287,6 +316,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -300,6 +330,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -313,6 +344,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -326,6 +358,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -339,6 +372,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -352,6 +386,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -365,6 +400,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -378,6 +414,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -391,6 +428,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -404,6 +442,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
@@ -417,6 +456,7 @@ class WmrInnerContainer extends Component {
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
 					calculateUnitCount={this.calculateUnitCount}
+					calculateMountCount={this.calculateMountCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateMaximumCount={this.calculateMaximumCount}
 				/>
