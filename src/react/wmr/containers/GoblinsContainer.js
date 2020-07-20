@@ -607,6 +607,8 @@ class GoblinsContainer extends Component {
 						addAuxiliary={this.addAuxiliary}
 						toggleAuxiliaries={this.toggleAuxiliaries}
 						determineIfValidAfterPointIncrease={this.determineIfValidAfterPointIncrease}
+						calculateMaximumCount={this.props.calculateMaximumCount}
+						pointTotal={this.state.pointTotal}
 					/>
 				</div>
 		}		
