@@ -64,8 +64,10 @@ class AuxiliarySelectionTile extends Component {
 		}
 		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
 			if (
-				highlightedAuxiliaries[i2].count > 1 &&
-				highlightedAuxiliaries[i2].auxiliary.special_rules.includes('no matter how large, can have no more than one')
+				highlightedAuxiliaries[i2].count > 1 && (
+					highlightedAuxiliaries[i2].auxiliary.is_unique === true ||
+					highlightedAuxiliaries[i2].auxiliary.is_unique === 't'
+				)
 			) {
 				highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 			}
