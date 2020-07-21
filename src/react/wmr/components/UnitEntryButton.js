@@ -17,20 +17,13 @@ const UnitEntryButton = props => {
 	let pointDisplay
 	let unitNameDisplay
 	if (greyedOut === false) {
-		if (props.unit.has_special_rules === true || props.unit.has_special_rules === 't') {
-			pointDisplay =
-				<span
-					onClick={() => props.updateUnitWhoseInformationIsShown(props.unit)}
-					className={style['unit-entry-button-point-value-label-wmr']}
-				>
-					{parseInt(props.unit.points)}
-				</span>
-		} else {
-			pointDisplay =
-				<span className={style['unit-entry-button-point-value-no-special']}>
-					{parseInt(props.unit.points)}
-				</span>
-		}
+		pointDisplay =
+			<span
+				onClick={() => props.updateUnitWhoseInformationIsShown(props.unit)}
+				className={style['unit-entry-button-point-value-label-wmr']}
+			>
+				{parseInt(props.unit.points)}
+			</span>
 		unitNameDisplay =
 			<span
 				onClick={() => props.addUnit(props.unit)}
@@ -39,20 +32,13 @@ const UnitEntryButton = props => {
 				{props.unit.display_name}
 			</span>
 	} else {
-		if (props.unit.has_special_rules === true || props.unit.has_special_rules === 't') {
-			pointDisplay =
-				<span
-					onClick={() => props.updateUnitWhoseInformationIsShown(props.unit)}
-					className={style['unit-entry-button-point-value-label-greyed-out']}
-				>
-					{parseInt(props.unit.points)}
-				</span>
-		} else {
-			pointDisplay =
-				<span className={style['unit-entry-button-point-value-no-special-greyed-out']}>
-					{parseInt(props.unit.points)}
-				</span>
-		}
+		pointDisplay =
+			<span
+				onClick={() => props.updateUnitWhoseInformationIsShown(props.unit)}
+				className={style['unit-entry-button-point-value-label-greyed-out']}
+			>
+				{parseInt(props.unit.points)}
+			</span>
 		unitNameDisplay =
 			<span className={style['unit-entry-button-label-greyed-out']}>
 				{props.unit.display_name}

@@ -63,7 +63,13 @@ class WmrInnerContainer extends Component {
 		let count = 0
 		let i2
 		for (i2 = 0; i2 < array.length; i2++) {
-			count += array[i2].count
+			if (
+				array[i2].unit.unit_type !== 'General' &&
+				array[i2].unit.unit_type !== 'Hero' &&
+				array[i2].unit.unit_type !== 'Wizard'
+			) {
+				count += array[i2].count
+			}
 		}
 		return count
 	}
@@ -100,7 +106,7 @@ class WmrInnerContainer extends Component {
 				breakPointUnits += unitArray[i2].count
 			}
 		}
-		let breakPoint = Math.floor(breakPointUnits / 2)
+		let breakPoint = Math.ceil(breakPointUnits / 2)
 		return breakPoint
 	}
 

@@ -128,7 +128,7 @@ class BretonniaContainer extends Component {
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
 			pointTotal: 370,
-			unitCount: 4,
+			unitCount: 3,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -168,7 +168,7 @@ class BretonniaContainer extends Component {
 				breakPointUnits += unitArray[i2].count
 			}
 		}
-		let breakPoint = Math.floor(breakPointUnits / 2)
+		let breakPoint = Math.ceil(breakPointUnits / 2)
 		return breakPoint
 	}	
 
@@ -669,7 +669,7 @@ class BretonniaContainer extends Component {
 			selectedAuxiliaries: [],
 			selectedMagicItems: [],
 			pointTotal: 370,
-			unitCount: 4,
+			unitCount: 3,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
