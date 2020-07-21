@@ -5,6 +5,7 @@ const InformationTile = props => {
 	let unsortedUnitSpecialRules = []
 	let minimum = props.unitWhoseInformationIsShown.minimum
 	let maximum = props.unitWhoseInformationIsShown.maximum
+	let minMaxLine
 	let i2
 
 	if (props.unitWhoseInformationIsShown.minimum === null) {
@@ -12,6 +13,14 @@ const InformationTile = props => {
 	}
 	if (props.unitWhoseInformationIsShown.maximum === null) {
 		maximum = '-'
+	}
+	if (
+		props.unitWhoseInformationIsShown.has_special_rules === true ||
+		props.unitWhoseInformationIsShown.has_special_rules === 't'
+	) {
+		minMaxLine = <div>{'Min/Max: '}{minimum}{'/'}{maximum}<br /><br /></div>
+	} else {
+		minMaxLine = <div>{'Min/Max: '}{minimum}{'/'}{maximum}<br /></div>
 	}
 
 	for (i2 = 0; i2 < props.specialRules.length; i2++) {
@@ -58,7 +67,7 @@ const InformationTile = props => {
 				Command: {props.unitWhoseInformationIsShown.command}<br />
 				Unit Size: {props.unitWhoseInformationIsShown.unit_size}<br />
 				Points: {props.unitWhoseInformationIsShown.points}<br />
-				Min/Max: {minimum}{'/'}{maximum}<br /><br />
+				{minMaxLine}
 			</div>
 			{unitSpecialRuleDisplay}
 		</div>
