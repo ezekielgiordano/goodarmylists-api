@@ -62,19 +62,19 @@ wmr_armies_array = unsorted_wmr_armies_array.sort {
         }
 wmr_armies_json = wmr_armies_array.to_json
 
-wmr_generals = data.exec('SELECT * FROM wmr_generals;')
-wmr_generals_array = []
-wmr_generals.each do |row|
-	wmr_generals_array << row
-end
-wmr_generals_json = wmr_generals_array.to_json
-
 wmr_units = data.exec('SELECT * FROM wmr_units;')
 wmr_units_array = []
 wmr_units.each do |row|
 	wmr_units_array << row
 end
 wmr_units_json = wmr_units_array.to_json
+
+wmr_special_rules = data.exec('SELECT * FROM wmr_special_rules;')
+wmr_special_rules_array = []
+wmr_special_rules.each do |row|
+	wmr_special_rules_array << row
+end
+wmr_special_rules_json = wmr_special_rules_array.to_json
 
 wmr_auxiliaries = data.exec('SELECT * FROM wmr_auxiliaries;')
 wmr_auxiliaries_array = []
@@ -126,14 +126,14 @@ get '/api/v1/wmr_armies' do
 	wmr_armies_json
 end
 
-get '/api/v1/wmr_generals' do
-	content_type :json
-	wmr_generals_json
-end
-
 get '/api/v1/wmr_units' do
 	content_type :json
 	wmr_units_json
+end
+
+get '/api/v1/wmr_special_rules' do
+	content_type :json
+	wmr_special_rules_json
 end
 
 get '/api/v1/wmr_auxiliaries' do

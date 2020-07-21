@@ -667,6 +667,7 @@ class AlbionContainer extends Component {
 			unitEntryButtonDisplay =
 				<InformationTile
 					unitWhoseInformationIsShown={this.state.unitWhoseInformationIsShown}
+					specialRules={this.props.specialRules}
 					toggleInformation={this.toggleInformation}
 				/>
 		}
