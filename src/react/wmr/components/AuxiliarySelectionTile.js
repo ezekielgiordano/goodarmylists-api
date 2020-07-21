@@ -36,7 +36,11 @@ class AuxiliarySelectionTile extends Component {
 	}
 
 	updateHighlightedAuxiliaries(auxiliary) {
+		let calculateMaximumCount = this.props.calculateMaximumCount
+		let determineIfValidAfterPointIncrease = this.props.determineIfValidAfterPointIncrease
+		let pointTotal = this.props.pointTotal
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
+		let optionPointTotalForThisUnit = this.state.optionPointTotalForThisUnit
 		let highlightedAuxiliariesNamesOnly = []
 		let auxiliaryObject
 		let duplicateCount = 0
@@ -73,20 +77,22 @@ class AuxiliarySelectionTile extends Component {
 			}
 		}
 		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
-			if (
-				parseInt(highlightedAuxiliaries[i2].auxiliary.maximum) * highlightedAuxiliaries[i2].count >
-				this.props.calculateMaximumCount(this.props.pointTotal + (parseInt(highlightedAuxiliaries[i2].auxiliary.points)) * highlightedAuxiliaries[i2].count - this.state.optionPointTotalForThisUnit + this.state.pointsOfAllHighlighted)
-			) {
-				highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
+			if (highlightedAuxiliaries[i2].auxiliary.maximum !== null) {
+				if (
+					highlightedAuxiliaries[i2].count >
+					(calculateMaximumCount(pointTotal + (parseInt(highlightedAuxiliaries[i2].auxiliary.points)) * highlightedAuxiliaries[i2].count - optionPointTotalForThisUnit + pointsOfAllHighlighted)) * highlightedAuxiliaries[i2].auxiliary.maximum
+				) {
+					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
+				}
 			}
 		}
 		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
 			if (highlightedAuxiliaries[i2].auxiliary.special_rules.includes('not independent')) {
-				if (!this.props.determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count - this.state.optionPointTotalForThisUnit)) {
+				if (!determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count - optionPointTotalForThisUnit)) {
 					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 				}
 			} else {
-				if (!this.props.determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count - this.state.optionPointTotalForThisUnit + this.state.pointsOfAllHighlighted)) {
+				if (!determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count - optionPointTotalForThisUnit + pointsOfAllHighlighted)) {
 					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 				}				
 			}
@@ -125,7 +131,14 @@ class AuxiliarySelectionTile extends Component {
 
 	render() {
 		let unitObject = this.props.unitObject
+		let selectedAuxiliaries = this.props.selectedAuxiliaries
+		let calculateMaximumCount = this.props.calculateMaximumCount
+		let determineIfValidAfterPointIncrease = this.props.determineIfValidAfterPointIncrease
+		let pointTotal = this.props.pointTotal
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
+		let highlightedAuxiliariesNamesOnly = this.state.highlightedAuxiliariesNamesOnly
+		let optionPointTotalForThisUnit = this.state.optionPointTotalForThisUnit
+		let pointsOfAllHighlighted = this.state.pointsOfAllHighlighted
 		let availableAuxiliaries = []
 		let i2
 
@@ -140,7 +153,6 @@ class AuxiliarySelectionTile extends Component {
 		}
 
 		let auxiliaryDisplay = availableAuxiliaries.map(auxiliary => {
-			let selectedAuxiliaries = this.props.selectedAuxiliaries
 			let greyedOut = false
 			let highlighted = false
 			let timesUsedByOthers = 0
@@ -155,13 +167,13 @@ class AuxiliarySelectionTile extends Component {
 				}
 			}
 
-			if (timesUsedByOthers >= this.props.calculateMaximumCount(this.props.pointTotal + parseInt(auxiliary.points) - this.state.optionPointTotalForThisUnit + this.state.pointsOfAllHighlighted)) {
+			if (timesUsedByOthers >= calculateMaximumCount(pointTotal + parseInt(auxiliary.points) - optionPointTotalForThisUnit + pointsOfAllHighlighted)) {
 				greyedOut = true
 			}
 
 			if (
-				!this.state.highlightedAuxiliariesNamesOnly.includes(auxiliary.name) &&
-				!this.props.determineIfValidAfterPointIncrease(parseInt(auxiliary.points) - this.state.optionPointTotalForThisUnit + this.state.pointsOfAllHighlighted)
+				!highlightedAuxiliariesNamesOnly.includes(auxiliary.name) &&
+				!determineIfValidAfterPointIncrease(parseInt(auxiliary.points) - optionPointTotalForThisUnit + pointsOfAllHighlighted)
 			) {
 				greyedOut = true
 			}
@@ -214,7 +226,7 @@ class AuxiliarySelectionTile extends Component {
 					<span 
 						onClick={() => this.props.addAuxiliary(
 							unitObject,
-							this.state.highlightedAuxiliaries
+							highlightedAuxiliaries
 						)}
 						className={style['clear-or-cancel-label']}
 					>
