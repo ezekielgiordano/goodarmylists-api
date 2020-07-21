@@ -3,7 +3,16 @@ import React from 'react'
 
 const InformationTile = props => {
 	let unsortedUnitSpecialRules = []
+	let minimum = props.unitWhoseInformationIsShown.minimum
+	let maximum = props.unitWhoseInformationIsShown.maximum
 	let i2
+
+	if (props.unitWhoseInformationIsShown.minimum === null) {
+		minimum = '-'
+	}
+	if (props.unitWhoseInformationIsShown.maximum === null) {
+		maximum = '-'
+	}
 
 	for (i2 = 0; i2 < props.specialRules.length; i2++) {
 		if (props.specialRules[i2].unit_name === props.unitWhoseInformationIsShown.name) {
@@ -40,7 +49,17 @@ const InformationTile = props => {
 				className={style['clear-or-cancel-label']}
 			>
 				Back
-			</span><br /><br />		
+			</span><br /><br />	
+			<div className={style['special-rule-entry']}>
+				Type: {props.unitWhoseInformationIsShown.unit_type}<br />
+				Attacks: {props.unitWhoseInformationIsShown.attacks}<br />
+				Hits: {props.unitWhoseInformationIsShown.hits}<br />
+				Armor: {props.unitWhoseInformationIsShown.armor}<br />
+				Command: {props.unitWhoseInformationIsShown.command}<br />
+				Unit Size: {props.unitWhoseInformationIsShown.unit_size}<br />
+				Points: {props.unitWhoseInformationIsShown.points}<br />
+				Min/Max: {minimum}{'/'}{maximum}<br /><br />
+			</div>
 			{unitSpecialRuleDisplay}
 		</div>
 	)
