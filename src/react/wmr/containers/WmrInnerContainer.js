@@ -94,7 +94,8 @@ class WmrInnerContainer extends Component {
 			if (
 				unitArray[i2].unit.unit_type !== 'General' &&
 				unitArray[i2].unit.unit_type !== 'Hero' &&
-				unitArray[i2].unit.unit_type !== 'Wizard'
+				unitArray[i2].unit.unit_type !== 'Wizard' &&
+				unitArray[i2].unit.name.includes('Pump Wagon') === false
 			) {
 				breakPointUnits += unitArray[i2].count
 			}
@@ -119,10 +120,16 @@ class WmrInnerContainer extends Component {
 		let selectedArmy = this.state.selectedArmy
 		let armyOptions = []
 		let labeledArmy
+		let specialRules = []
 		let i2
 		for (i2 = 0; i2 < this.props.armies.length; i2++) {
 			labeledArmy = { value: this.props.armies[i2], label: this.props.armies[i2].display_name }
 			armyOptions.push(labeledArmy)
+		}
+		for (i2 = 0; i2 < this.props.specialRules.length; i2++) {
+			if (this.props.specialRules[i2].army_name === selectedArmy.name) {
+				specialRules.push(this.props.specialRules[i2])
+			}
 		}
 		
 		let display
@@ -131,6 +138,7 @@ class WmrInnerContainer extends Component {
 				<EmpireContainer
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -145,6 +153,7 @@ class WmrInnerContainer extends Component {
 				<TombKingsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -159,6 +168,7 @@ class WmrInnerContainer extends Component {
 				<ChaosContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -173,6 +183,7 @@ class WmrInnerContainer extends Component {
 				<OrcsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -187,6 +198,7 @@ class WmrInnerContainer extends Component {
 				<HighElvesContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -201,6 +213,7 @@ class WmrInnerContainer extends Component {
 				<DwarfsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -215,6 +228,7 @@ class WmrInnerContainer extends Component {
 				<SkavenContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -229,6 +243,7 @@ class WmrInnerContainer extends Component {
 				<LizardmenContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -243,6 +258,7 @@ class WmrInnerContainer extends Component {
 				<BretonniaContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -256,6 +272,7 @@ class WmrInnerContainer extends Component {
 				<KislevContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -270,6 +287,7 @@ class WmrInnerContainer extends Component {
 				<DarkElvesContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -284,6 +302,7 @@ class WmrInnerContainer extends Component {
 				<DemonsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -298,6 +317,7 @@ class WmrInnerContainer extends Component {
 				<ArabyContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -312,6 +332,7 @@ class WmrInnerContainer extends Component {
 				<VampireCountsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -326,6 +347,7 @@ class WmrInnerContainer extends Component {
 				<DogsOfWarContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -340,6 +362,7 @@ class WmrInnerContainer extends Component {
 				<OgreKingdomsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -354,6 +377,7 @@ class WmrInnerContainer extends Component {
 				<AlbionContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -368,6 +392,7 @@ class WmrInnerContainer extends Component {
 				<GoblinsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -382,6 +407,7 @@ class WmrInnerContainer extends Component {
 				<WitchHuntersContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -396,20 +422,7 @@ class WmrInnerContainer extends Component {
 				<ChaosDwarfsContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
-					auxiliaries={this.props.auxiliaries}
-					magicItems={this.props.magicItems}
-					calculatePointTotal={this.calculatePointTotal}
-					calculateUnitCount={this.calculateUnitCount}
-					calculateMountCount={this.calculateMountCount}
-					calculateBreakPoint={this.calculateBreakPoint}
-					calculateMaximumCount={this.calculateMaximumCount}
-				/>
-		}
-		if (selectedArmy.display_name === 'Albion') {
-			display =
-				<AlbionContainer 
-					selectedArmy={this.state.selectedArmy}
-					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -424,6 +437,7 @@ class WmrInnerContainer extends Component {
 				<WoodElvesContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -438,6 +452,7 @@ class WmrInnerContainer extends Component {
 				<BeastmenContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}
@@ -452,6 +467,7 @@ class WmrInnerContainer extends Component {
 				<NorseContainer 
 					selectedArmy={this.state.selectedArmy}
 					units={this.props.units}
+					specialRules={specialRules}
 					auxiliaries={this.props.auxiliaries}
 					magicItems={this.props.magicItems}
 					calculatePointTotal={this.calculatePointTotal}

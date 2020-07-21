@@ -8,6 +8,7 @@ class WmrOuterContainer extends Component {
 		this.state = {
 			armies: [],
 			units: [],
+			specialRules: [],
 			auxiliaries: [],
 			magicItems: []		}
 	}
@@ -42,6 +43,22 @@ class WmrOuterContainer extends Component {
 		.then(response => response.json())
 		.then(body => {
 			this.setState({ units: body })
+		})
+		.catch(error => console.error(`Error in fetch: ${error.message}`))
+
+		fetch('/api/v1/wmr_special_rules')
+		.then(response => {
+			if (response.ok) {
+				return response
+			} else {
+				let errorMessage = `${response.status} (${response.statusText})`,
+				error = new Error(errorMessage)
+				throw(error)
+			}
+		})
+		.then(response => response.json())
+		.then(body => {
+			this.setState({ specialRules: body })
 		})
 		.catch(error => console.error(`Error in fetch: ${error.message}`))
 
@@ -131,6 +148,7 @@ class WmrOuterContainer extends Component {
 				<WmrInnerContainer
 					armies={this.state.armies}
 					units={this.state.units}
+					specialRules={this.state.specialRules}
 					auxiliaries={this.state.auxiliaries}
 					magicItems={this.state.magicItems}
 					dropdownStyle={dropdownStyle}
