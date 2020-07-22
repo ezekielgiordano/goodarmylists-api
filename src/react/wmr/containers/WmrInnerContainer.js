@@ -2753,8 +2753,7 @@ class WmrInnerContainer extends Component {
 				</div>
 		}
 
-
-
+		let pointValueDropdown
 		let clearListDiv
 		let unitEntryButtonTitle
 		let greyedOutUnits
@@ -2770,9 +2769,19 @@ class WmrInnerContainer extends Component {
 		} else {
 			document.body.style.overflow = 'visible'
 			displayNoneBottom = ''
+			pointValueDropdown =
+				<div className={style['point-value-dropdown']}>
+					<Select
+						defaultValue={{ label: '2000-2999 Points', value: 2 }}
+						options={this.props.maximumCountOptions}
+						isSearchable={false}
+						styles={this.props.dropdownStyle}
+						onChange={this.updateMaximumCount}								
+					/>
+				</div>
 
 			clearListDiv =
-				<div className={style['clear-list-div']}>
+				<div className={style['clear-list-div-wmr']}>
 					<span
 						className={style['clear-or-cancel-label']}
 						onClick={() => this.clearList(selectedArmy, this.state.maximumCount)}
@@ -2910,18 +2919,12 @@ class WmrInnerContainer extends Component {
 					/>
 				</div>
 				<div className={displayNoneBottom}>
-					{clearListDiv}	
+					{pointValueDropdown}
+					{clearListDiv}
 					<div className={style['everything-after-army-dropdown']}>
 						<div>
 							<div className={style['unit-entry-buttons']}>
 								{unitEntryButtonTitle}<br />
-								<Select
-									defaultValue={{ label: '2000-2999 Points', value: 2 }}
-									options={this.props.maximumCountOptions}
-									isSearchable={false}
-									styles={this.props.dropdownStyle}
-									onChange={this.updateMaximumCount}								
-								/><br />
 								{unitEntryButtonDisplay}
 							</div>
 						</div>
