@@ -36,12 +36,16 @@ class MagicItemSelectionTile extends Component {
 	}
 
 	updateHighlightedMagicItems(magicItem) {
+		let pointTotal = this.props.pointTotal
+		let maximumCount = this.props.maximumCount
 		let highlightedMagicItems = this.state.highlightedMagicItems
+		let optionPointTotalForThisUnit = this.state.optionPointTotalForThisUnit
+		let pointsOfAllHighlighted = this.state.pointsOfAllHighlighted
 		let highlightedMagicItemsNamesOnly = []
 		let magicItemObject
 		let duplicateCount = 0
 		let totalCount = 0
-		let pointsOfAllHighlighted = 0
+		let newPointsOfAllHighlighted = 0
 		let i2
 		for (i2 = 0; i2 < highlightedMagicItems.length; i2++) {
 			if (highlightedMagicItems[i2].magicItem.name === magicItem.name) {
@@ -68,7 +72,15 @@ class MagicItemSelectionTile extends Component {
 			}
 		}
 		for (i2 = highlightedMagicItems.length - 1; i2 >= 0; i2--) {
-			if (!this.props.determineIfValidAfterPointIncrease(parseInt(highlightedMagicItems[i2].magicItem.points) * highlightedMagicItems[i2].count - this.state.optionPointTotalForThisUnit + this.state.pointsOfAllHighlighted)) {
+			if (
+				parseInt(highlightedMagicItems[i2].magicItem.points) -
+				optionPointTotalForThisUnit +
+				pointsOfAllHighlighted +
+				pointTotal >
+				maximumCount *
+				1000 +
+				999
+			) {
 				highlightedMagicItems.splice(highlightedMagicItems.indexOf(highlightedMagicItems[i2]), 1)
 			}
 		}
@@ -82,20 +94,25 @@ class MagicItemSelectionTile extends Component {
 
 		for (i2 = 0; i2 < highlightedMagicItems.length; i2++) {
 			highlightedMagicItemsNamesOnly.push(highlightedMagicItems[i2].magicItem.name)
-			pointsOfAllHighlighted += parseInt(highlightedMagicItems[i2].magicItem.points) * highlightedMagicItems[i2].count
+			newPointsOfAllHighlighted += parseInt(highlightedMagicItems[i2].magicItem.points) * highlightedMagicItems[i2].count
 		}
 
 		this.setState({
 			highlightedMagicItems: highlightedMagicItems,
 			highlightedMagicItemsNamesOnly: highlightedMagicItemsNamesOnly,
-			pointsOfAllHighlighted: pointsOfAllHighlighted
+			pointsOfAllHighlighted: newPointsOfAllHighlighted
 		})		
 	}
 
 	render() {
 		let unitObject = this.props.unitObject
 		let selectedAuxiliaries = this.props.selectedAuxiliaries
+		let pointTotal = this.props.pointTotal
+		let maximumCount = this.props.maximumCount
 		let highlightedMagicItems = this.state.highlightedMagicItems
+		let highlightedMagicItemsNamesOnly = this.state.highlightedMagicItemsNamesOnly
+		let optionPointTotalForThisUnit = this.state.optionPointTotalForThisUnit
+		let pointsOfAllHighlighted = this.state.pointsOfAllHighlighted
 		let availableMagicItems = []
 		let tzarina = false
 		let sorcererLord = false
@@ -166,8 +183,8 @@ class MagicItemSelectionTile extends Component {
 			let count = 0
 
 			if (
-				!this.state.highlightedMagicItemsNamesOnly.includes(magicItem.name) &&
-				!this.props.determineIfValidAfterPointIncrease(parseInt(magicItem.points) - this.state.optionPointTotalForThisUnit + this.state.pointsOfAllHighlighted)
+				highlightedMagicItemsNamesOnly.includes(magicItem.name) === false &&
+				parseInt(magicItem.points) - optionPointTotalForThisUnit + pointsOfAllHighlighted + pointTotal > maximumCount * 1000 + 999
 			) {
 				greyedOut = true
 			}

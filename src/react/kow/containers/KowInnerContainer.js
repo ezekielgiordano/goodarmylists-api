@@ -2037,7 +2037,7 @@ class KowInnerContainer extends Component {
 						<div className={style['copyright-notice']}>Kings of War is copyrighted by Mantic Entertainment</div>
 						<div className={style['css-remover']}>
 							<Select
-								placeholder="Select Army..."
+								placeholder="Select army..."
 								options={armyOptions}
 								isSearchable={false}
 								styles={this.props.dropdownStyle}

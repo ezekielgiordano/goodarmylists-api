@@ -36,16 +36,17 @@ class AuxiliarySelectionTile extends Component {
 	}
 
 	updateHighlightedAuxiliaries(auxiliary) {
-		let calculateMaximumCount = this.props.calculateMaximumCount
-		let determineIfValidAfterPointIncrease = this.props.determineIfValidAfterPointIncrease
+		let unitObject = this.props.unitObject
 		let pointTotal = this.props.pointTotal
+		let maximumCount = this.props.maximumCount
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
 		let optionPointTotalForThisUnit = this.state.optionPointTotalForThisUnit
+		let pointsOfAllHighlighted = this.state.pointsOfAllHighlighted
 		let highlightedAuxiliariesNamesOnly = []
 		let auxiliaryObject
 		let duplicateCount = 0
 		let totalCount = 0
-		let pointsOfAllHighlighted = 0
+		let newPointsOfAllHighlighted = 0
 		let i2
 		for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
 			if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
@@ -78,36 +79,50 @@ class AuxiliarySelectionTile extends Component {
 		}
 		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
 			if (highlightedAuxiliaries[i2].auxiliary.maximum !== null) {
-				if (
-					highlightedAuxiliaries[i2].count >
-					(calculateMaximumCount(pointTotal + (parseInt(highlightedAuxiliaries[i2].auxiliary.points)) * highlightedAuxiliaries[i2].count - optionPointTotalForThisUnit + pointsOfAllHighlighted)) * highlightedAuxiliaries[i2].auxiliary.maximum
-				) {
+				if (highlightedAuxiliaries[i2].count > maximumCount * highlightedAuxiliaries[i2].auxiliary.maximum) {
 					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 				}
 			}
 		}
 		for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
 			if (highlightedAuxiliaries[i2].auxiliary.special_rules.includes('not independent')) {
-				if (!determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count - optionPointTotalForThisUnit)) {
+				if (
+					parseInt(highlightedAuxiliaries[i2].auxiliary.points) *
+					highlightedAuxiliaries[i2].count -
+					optionPointTotalForThisUnit +
+					pointTotal >
+					maximumCount *
+					1000 +
+					999
+				) {
 					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 				}
 			} else {
-				if (!determineIfValidAfterPointIncrease(parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count - optionPointTotalForThisUnit + pointsOfAllHighlighted)) {
+				if (
+					parseInt(highlightedAuxiliaries[i2].auxiliary.points) *
+					highlightedAuxiliaries[i2].count -
+					optionPointTotalForThisUnit +
+					pointsOfAllHighlighted +
+					pointTotal >
+					maximumCount *
+					1000 +
+					999
+				) {
 					highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 				}				
 			}
 		}
-		if (totalCount > this.props.unitObject.count) { 
+		if (totalCount > unitObject.count) { 
 			for (i2 = highlightedAuxiliaries.length - 1; i2 >= 0; i2--) {
 				if (highlightedAuxiliaries[i2].auxiliary.name === auxiliary.name) {
 					if (
-						(auxiliary.name === 'Bear (Kislev)' && this.props.unitObject.unit.unit_type === 'General') ||
-						(auxiliary.name === 'Great Taurus (Chaos Dwarfs)' && this.props.unitObject.unit.unit_type === 'General') ||
-						(auxiliary.name === 'Were Kin (Norse)' && this.props.unitObject.unit.unit_type === 'Wizard') ||
+						(auxiliary.name === 'Bear (Kislev)' && unitObject.unit.unit_type === 'General') ||
+						(auxiliary.name === 'Great Taurus (Chaos Dwarfs)' && unitObject.unit.unit_type === 'General') ||
+						(auxiliary.name === 'Were Kin (Norse)' && unitObject.unit.unit_type === 'Wizard') ||
 						auxiliary.name === 'Demonic Wings (Demons)' ||
 						auxiliary.name === 'Favor of the Gods (Demons)'
 					) {
-						if (highlightedAuxiliaries[i2].count > this.props.unitObject.count) {
+						if (highlightedAuxiliaries[i2].count > unitObject.count) {
 							highlightedAuxiliaries.splice(highlightedAuxiliaries.indexOf(highlightedAuxiliaries[i2]), 1)
 						}
 					} else {
@@ -119,22 +134,21 @@ class AuxiliarySelectionTile extends Component {
 
 		for (i2 = 0; i2 < highlightedAuxiliaries.length; i2++) {
 			highlightedAuxiliariesNamesOnly.push(highlightedAuxiliaries[i2].auxiliary.name)
-			pointsOfAllHighlighted += parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count
+			newPointsOfAllHighlighted += parseInt(highlightedAuxiliaries[i2].auxiliary.points) * highlightedAuxiliaries[i2].count
 		}
 
 		this.setState({
 			highlightedAuxiliaries: highlightedAuxiliaries,
 			highlightedAuxiliariesNamesOnly: highlightedAuxiliariesNamesOnly,
-			pointsOfAllHighlighted: pointsOfAllHighlighted
+			pointsOfAllHighlighted: newPointsOfAllHighlighted
 		})
 	}
 
 	render() {
 		let unitObject = this.props.unitObject
 		let selectedAuxiliaries = this.props.selectedAuxiliaries
-		let calculateMaximumCount = this.props.calculateMaximumCount
-		let determineIfValidAfterPointIncrease = this.props.determineIfValidAfterPointIncrease
 		let pointTotal = this.props.pointTotal
+		let maximumCount = this.props.maximumCount
 		let highlightedAuxiliaries = this.state.highlightedAuxiliaries
 		let highlightedAuxiliariesNamesOnly = this.state.highlightedAuxiliariesNamesOnly
 		let optionPointTotalForThisUnit = this.state.optionPointTotalForThisUnit
@@ -167,13 +181,15 @@ class AuxiliarySelectionTile extends Component {
 				}
 			}
 
-			if (timesUsedByOthers >= calculateMaximumCount(pointTotal + parseInt(auxiliary.points) - optionPointTotalForThisUnit + pointsOfAllHighlighted)) {
-				greyedOut = true
+			if (auxiliary.maximum !== null) {
+				if (timesUsedByOthers >= maximumCount * auxiliary.maximum) {
+					greyedOut = true
+				}
 			}
 
 			if (
-				!highlightedAuxiliariesNamesOnly.includes(auxiliary.name) &&
-				!determineIfValidAfterPointIncrease(parseInt(auxiliary.points) - optionPointTotalForThisUnit + pointsOfAllHighlighted)
+				highlightedAuxiliariesNamesOnly.includes(auxiliary.name) === false &&
+				parseInt(auxiliary.points) - optionPointTotalForThisUnit + pointsOfAllHighlighted + pointTotal > maximumCount * 1000 + 999
 			) {
 				greyedOut = true
 			}
