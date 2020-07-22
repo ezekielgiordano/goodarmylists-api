@@ -134,7 +134,7 @@ class WmrOuterContainer extends Component {
 		return unitCount
 	}
 
-	calculateBreakPoint(unitArray, auxiliaryArray) {
+	calculateBreakPoint(unitArray) {
 		let breakPointUnits = 0
 		let i2
 		if (unitArray) {
