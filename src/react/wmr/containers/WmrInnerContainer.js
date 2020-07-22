@@ -24,7 +24,7 @@ class WmrInnerContainer extends Component {
 			pointTotal: 0,
 			unitCount: 0,
 			breakPoint: 0,
-			maximumCount: 0,
+			maximumCount: 2,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
@@ -55,7 +55,7 @@ class WmrInnerContainer extends Component {
 
 	updateSelectedArmy(army) {
 		this.setState({ selectedArmy: army.value })
-		this.clearList(army.value, 2)
+		this.clearList(army.value, this.state.maximumCount)
 	}
 
 	updateMaximumCount(maximumCount) {
@@ -1921,7 +1921,6 @@ class WmrInnerContainer extends Component {
 			pointTotal: this.props.calculatePointTotal(coreUnits, [], []),
 			unitCount: this.props.calculateUnitCount(coreUnits),
 			breakPoint: this.props.calculateBreakPoint(coreUnits),
-			maximumCount: maximumCount,
 			informationVisible: false,
 			formattedListVisible: false,
 			auxiliariesVisible: false,
