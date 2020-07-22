@@ -153,6 +153,32 @@ hr {
 	display: inline-block;
 }
 
+.point-value-dropdown {
+	float: left;
+	margin: 10px 0px 10px 0px;
+	width: 85%;
+}
+
+@media only screen and (max-width: 950px) {	.point-value-dropdown {	width: 82.5%; } }
+
+@media only screen and (max-width: 900px) {	.point-value-dropdown {	width: 80%;	} }
+
+@media only screen and (max-width: 800px) {	.point-value-dropdown {	width: 77.5%; } }
+
+@media only screen and (max-width: 750px) {	.point-value-dropdown {	width: 75%; } }
+
+@media only screen and (max-width: 700px) {	.point-value-dropdown {	width: 72.5%; } }
+
+@media only screen and (max-width: 660px) { .point-value-dropdown {	width: 71%;	} }
+
+@media only screen and (max-width: 620px) {	.point-value-dropdown {	width: 69%; } }
+
+@media only screen and (max-width: 575px) {	.point-value-dropdown {	width: 67.5%; } }
+
+/*@media only screen and (max-width: 540px) {	.point-value-dropdown {	width: 65%;	} }*/
+
+@media only screen and (max-width: 480px) {	.point-value-dropdown {	width: 65%;	} }
+
 .clear-list-div {
 	margin: 20px 0px 20px 0px;
 	user-select: none;
@@ -161,9 +187,14 @@ hr {
 	margin-right: auto;
 }
 
+.clear-list-div-wmr {
+	float: right;
+	margin: 17.3px 0px 10px 0px;
+}
+
 .clear-or-cancel-label {
 	cursor: pointer;
-	padding: 9.3px;
+	padding: 8.7px 9px 9px 9px;
 	border: 1px solid #000000;
 	background-color: #FFFFFF;
 }
@@ -373,45 +404,18 @@ hr {
 	.spacer-div {
 		margin: 0px 4px 0px 0px;
 	}
-/*	.information-icon {
-		margin: 0px 0px 0px 10px;
-	}
-	.unit-entry-button-point-value-label-wmr {
-		margin: 0px 10px 0px 2px;
-	}
-	.unit-entry-button-point-value-label-greyed-out {
-		margin: 0px 10px 0px 2px;
-	}*/
 }
 
 @media only screen and (max-width: 411px) {
 	.spacer-div {
 		margin: 0px 2px 0px 0px;
 	}
-/*	.information-icon {
-		margin: 0px 0px 0px 5px;
-	}
-	.unit-entry-button-point-value-label-wmr {
-		margin: 0px 6px 0px 0px;
-	}
-	.unit-entry-button-point-value-label-greyed-out {
-		margin: 0px 6px 0px 0px;
-	}*/
 }
 
 @media only screen and (max-width: 320px) {
 	.spacer-div {
 		margin: 0px 0px 0px 0px;
 	}
-/*	.information-icon {
-		margin: 0px 0px 0px 0px;
-	}
-	.unit-entry-button-point-value-label-wmr {
-		margin: 0px 3px 0px 0px;
-	}
-	.unit-entry-button-point-value-label-greyed-out {
-		margin: 0px 3px 0px 0px;
-	}*/
 }
 
 .instruction {
