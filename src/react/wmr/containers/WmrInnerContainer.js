@@ -2011,6 +2011,7 @@ class WmrInnerContainer extends Component {
 			listedUnits: listedUnits,
 			pointTotal: this.props.calculatePointTotal(listedUnits, this.state.selectedAuxiliaries, this.state.selectedMagicItems),
 			unitCount: this.props.calculateUnitCount(listedUnits),
+			breakPoint: this.props.calculateBreakPoint(listedUnits),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
@@ -2538,6 +2539,7 @@ class WmrInnerContainer extends Component {
 			selectedAuxiliaries: selectedAuxiliaries,
 			pointTotal: this.props.calculatePointTotal(listedUnits, selectedAuxiliaries, this.state.selectedMagicItems),
 			unitCount: this.props.calculateUnitCount(listedUnits),
+			breakPoint: this.props.calculateBreakPoint(listedUnits),
 			auxiliariesVisible: false,
 			magicItemsVisible: false
 		})
