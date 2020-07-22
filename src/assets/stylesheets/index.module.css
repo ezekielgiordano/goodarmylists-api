@@ -644,6 +644,10 @@ hr {
 	line-height: 107%;
 }
 
+.everything-except-print-section {
+	user-select: none;
+}
+
 @media print {
 	body {
 		visibility: hidden;
