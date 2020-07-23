@@ -62,11 +62,12 @@ class WmrInnerContainer extends Component {
 		let determineIfValidAfterGameSizeChange = this.props.determineIfValidAfterGameSizeChange
 		let selectedArmy = this.state.selectedArmy
 		let listedUnits = this.state.listedUnits
+		let pointTotal = this.state.pointTotal
 		let oldMaximum = this.state.maximumCount
 		let newMaximum = maximumCount.value
-		this.setState({ maximumCount: maximumCount.value })
-		if (!determineIfValidAfterGameSizeChange(listedUnits, selectedArmy.name, oldMaximum, newMaximum)) {
-			this.clearList(selectedArmy, maximumCount.value)
+		this.setState({ maximumCount: newMaximum })
+		if (!determineIfValidAfterGameSizeChange(listedUnits, selectedArmy.name, pointTotal, oldMaximum, newMaximum)) {
+			this.clearList(selectedArmy, newMaximum)
 		}
 	}
 
