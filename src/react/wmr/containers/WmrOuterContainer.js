@@ -15,7 +15,8 @@ class WmrOuterContainer extends Component {
 		this.calculatePointTotal = this.calculatePointTotal.bind(this)
 		this.calculateUnitCount = this.calculateUnitCount.bind(this)
 		this.calculateBreakPoint = this.calculateBreakPoint.bind(this)
-		this.calculateCoreUnitCounts = this.calculateCoreUnitCounts.bind(this)	
+		this.calculateCoreUnitCounts = this.calculateCoreUnitCounts.bind(this)
+		this.determineIfValidAfterGameSizeChange = this.determineIfValidAfterGameSizeChange.bind(this)
 	}
 
 	componentDidMount() {
@@ -528,7 +529,219 @@ class WmrOuterContainer extends Component {
 			}
 		}
 		return coreUnitCounts
-	}	
+	}
+
+	determineIfValidAfterGameSizeChange(unitArray, selectedArmyName, oldMaximum, newMaximum) {
+		let unitCount = this.calculateUnitCount(unitArray)
+		let coreUnitCounts = this.calculateCoreUnitCounts(unitArray, selectedArmyName, newMaximum)
+		let willBeKept = false
+
+		if (selectedArmyName === 'The Empire') {
+			if (
+				coreUnitCounts.empireHalberdierCount >= newMaximum * 2 &&
+				coreUnitCounts.empireCrossbowmanCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Tomb Kings') {
+			if (
+				coreUnitCounts.tombKingSkeletonCount >= newMaximum * 2 &&
+				coreUnitCounts.skeletonBowmanCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Chaos') {
+			if (
+				coreUnitCounts.chaosWarriorCount >= newMaximum &&
+				coreUnitCounts.chaosMarauderCount >= newMaximum &&
+				unitCount > oldMaximum * 2
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Orcs') {
+			if (
+				coreUnitCounts.orcWarriorCount >= newMaximum * 2 &&
+				coreUnitCounts.orcGoblinCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'High Elves') {
+			if (
+				coreUnitCounts.highElfSpearmanCount >= newMaximum * 2 &&
+				coreUnitCounts.highElfArcherCount >= newMaximum &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Dwarfs') {
+			if (
+				coreUnitCounts.dwarfWarriorCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 2
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Skaven') {
+			if (
+				coreUnitCounts.clanratCount >= newMaximum * 2 &&
+				coreUnitCounts.ratSwarmCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Lizardmen') {
+			if (
+				coreUnitCounts.skinkCount >= newMaximum * 2 &&
+				coreUnitCounts.saurusCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Bretonnia') {
+			if (
+				coreUnitCounts.manAtArmsCount >= newMaximum &&
+				coreUnitCounts.squireCount >= newMaximum &&
+				coreUnitCounts.bretonnianKnightCount >= newMaximum &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Kislev') {
+			if (
+				coreUnitCounts.kislevHorseArcherCount>= newMaximum * 2 &&
+				coreUnitCounts.kislevAxemanCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Dark Elves') {
+			if (
+				coreUnitCounts.darkElfSpearmanCount >= newMaximum * 2 &&
+				coreUnitCounts.darkElfCrossbowmanCount >= newMaximum &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Demons') {
+			if (
+				coreUnitCounts.demonHordeCount >= newMaximum * 3 &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Araby') {
+			if (
+				coreUnitCounts.arabySpearmanCount >= newMaximum * 2 &&
+				coreUnitCounts.arabyBowmanCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Vampire Counts') {
+			if (
+				coreUnitCounts.vampireCountSkeletonCount >= newMaximum * 2 &&
+				coreUnitCounts.zombieCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Dogs of War') {
+			if (
+				coreUnitCounts.pikemanCount >= newMaximum * 2 &&
+				coreUnitCounts.dogsOfWarCrossbowmanCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Ogre Kingdoms') {
+			if (
+				coreUnitCounts.bullOgreCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 2
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Albion') {
+			if (
+				coreUnitCounts.albionWarriorCount >= newMaximum * 2 &&
+				coreUnitCounts.slingerCount >= newMaximum &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Goblins') {
+			if (
+				coreUnitCounts.goblinGoblinCount >= newMaximum * 4 &&
+				coreUnitCounts.wolfRiderCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 6
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Witch Hunters') {
+			if (
+				coreUnitCounts.zealotCount >= newMaximum * 3 &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Chaos Dwarfs') {
+			if (
+				coreUnitCounts.chaosDwarfCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 2
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Wood Elves') {
+			if (
+				coreUnitCounts.gladeGuardCount >= newMaximum * 2 &&
+				coreUnitCounts.dryadCount >= newMaximum &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Beastmen') {
+			if (
+				coreUnitCounts.beastherdCount >= newMaximum * 2 &&
+				coreUnitCounts.herdkinCount >= newMaximum * 2 &&
+				unitCount > oldMaximum * 4
+			) {
+				willBeKept = true
+			}
+		}
+		if (selectedArmyName === 'Norse') {
+			if (
+				coreUnitCounts.bondsmanCount >= newMaximum * 2 &&
+				coreUnitCounts.huscarlCount >= newMaximum &&
+				unitCount > oldMaximum * 3
+			) {
+				willBeKept = true
+			}
+		}
+
+		return willBeKept
+	}
 
 	render() {
 		let dropdownStyle = {
@@ -581,7 +794,9 @@ class WmrOuterContainer extends Component {
 		let maximumCountOptions = [
 			{ label: '0-1999 points', value: 1 },
 			{ label: '2000-2999 points', value: 2 },
-			{ label: '3000-3999 points', value: 3 }
+			{ label: '3000-3999 points', value: 3 },
+			{ label: '4000-4999 points', value: 4 },
+			{ label: '5000-5999 points', value: 5 }
 		]
 
 		let armyOptions = []
@@ -606,6 +821,7 @@ class WmrOuterContainer extends Component {
 					calculateUnitCount={this.calculateUnitCount}
 					calculateBreakPoint={this.calculateBreakPoint}
 					calculateCoreUnitCounts={this.calculateCoreUnitCounts}
+					determineIfValidAfterGameSizeChange={this.determineIfValidAfterGameSizeChange}
 				/>
 				<div id="print-section-id" className={style['print-section']}></div>
 			</div>
