@@ -1948,6 +1948,7 @@ class WmrInnerContainer extends Component {
 		let maximumCount= this.state.maximumCount
 		let calculateCoreUnitCounts = this.props.calculateCoreUnitCounts
 		let locked = false
+		let earthshakerAndDeathRocketCount = 0
 		let i2
 		let i3
 
@@ -1957,11 +1958,20 @@ class WmrInnerContainer extends Component {
 			}
 		}
 
+		for (i2 = 0; i2 < listedUnits.length; i2++) {
+			if (
+				listedUnits[i2].unit.name === 'Earthshaker Cannon (Chaos Dwarfs)' ||
+				listedUnits[i2].unit.name === 'Death Rocket (Chaos Dwarfs)'
+			) {
+				earthshakerAndDeathRocketCount += listedUnits[i2].count
+			}
+		}
+
 		let coreUnitCounts = calculateCoreUnitCounts(listedUnits, selectedArmy.name, maximumCount)
 
 		for (i2 = 0; i2 < unitsInArmy.length; i2++) {
 			for (i3 = 0; i3 < unitArray.length; i3++) {
-				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {
+				if (unitArray[i3].unit.name === unitsInArmy[i2].name) {			
 					if (unitsInArmy[i2].is_unique === true || unitsInArmy[i2].is_unique === 't') {
 						locked = true
 					}
@@ -1983,6 +1993,17 @@ class WmrInnerContainer extends Component {
 					}
 				}
 			}
+
+			if (unitsInArmy[i2].name === 'Earthshaker Cannon (Chaos Dwarfs)') {
+				if (earthshakerAndDeathRocketCount >= maximumCount) {
+					locked = true
+				}
+			}
+			if (unitsInArmy[i2].name === 'Death Rocket (Chaos Dwarfs)') {
+				if (earthshakerAndDeathRocketCount >= maximumCount) {
+					locked = true
+				}
+			}	
 
 			if (parseInt(unitsInArmy[i2].points) + pointTotal > maximumCount * 1000 + 999) {
 				locked = true
