@@ -2673,13 +2673,13 @@ class WmrInnerContainer extends Component {
 	}
 
 	toggleInformation() {
-		let isAboutToBeVisible
-		if (this.state.informationVisible === false) {
-			isAboutToBeVisible = true
-		} else {
-			isAboutToBeVisible = false
-		}
-		this.setState({ informationVisible: isAboutToBeVisible })
+		// let isAboutToBeVisible
+		// if (this.state.informationVisible === false) {
+		// 	isAboutToBeVisible = true
+		// } else {
+		// 	isAboutToBeVisible = false
+		// }
+		// this.setState({ informationVisible: isAboutToBeVisible })
 	}
 
 	toggleFormattedList() {
@@ -2935,7 +2935,7 @@ class WmrInnerContainer extends Component {
 						</span>
 					</div>
 					<div className={style['main-title-box-wmr']}>
-						<h2 className={style['main-title']}>Make a Good Warmaster* List</h2>
+						<h2 className={style['main-title']}>Make a Good Warmaster Revolution List</h2>
 					</div>
 					<div className={style['copyright-notice']}>
 						All content is unofficial and unendorsed by Games Workshop Limited

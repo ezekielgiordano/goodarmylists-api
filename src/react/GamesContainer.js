@@ -19,7 +19,7 @@ const GamesContainer = props => {
 				<div className={style['main-page-games']}>
 					<div className={style['main-page-game']}>
 						<span className={style['main-page-game-label']}>
-							<Link to='/wmr'>Warmaster*</Link>
+							<Link to='/wmr'>Warmaster Revolution</Link>
 						</span>
 					</div>
 				</div>

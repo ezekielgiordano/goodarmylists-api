@@ -254,8 +254,8 @@ hr {
 }
 
 .unit-entry-button-point-value-label-wmr:hover, .unit-entry-button-point-value-label-greyed-out:hover {
-	cursor: pointer;
-	background-color: #D3D3D3;
+/*	cursor: pointer;
+	background-color: #D3D3D3;*/
 }
 
 .unit-entry-button-label-div {
