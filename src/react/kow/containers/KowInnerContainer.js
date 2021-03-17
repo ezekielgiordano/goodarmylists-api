@@ -976,7 +976,8 @@ class KowInnerContainer extends Component {
 				highlightedUnitOptions[i].unitOption.display_name === 'Infernal Advance' ||
 				highlightedUnitOptions[i].unitOption.display_name === 'Eternal Guard' ||
 				highlightedUnitOptions[i].unitOption.display_name === 'Raid Leader' ||
-				highlightedUnitOptions[i].unitOption.display_name === 'Path of Fire'
+				highlightedUnitOptions[i].unitOption.display_name === 'Path of Fire' ||
+				highlightedUnitOptions[i].unitOption.display_name === 'Wiltfather'
 			) {
 				for (i2 = 0; i2 < selectedArtifacts.length; i2++) {
 					if (selectedArtifacts[i].index === unitObject.index) {
@@ -1125,7 +1126,8 @@ class KowInnerContainer extends Component {
 					selectedUnitOptions[i].unitOption.display_name === 'Infernal Advance' ||
 					selectedUnitOptions[i].unitOption.display_name === 'Eternal Guard' ||
 					selectedUnitOptions[i].unitOption.display_name === 'Raid Leader' ||
-					selectedUnitOptions[i].unitOption.display_name === 'Path of Fire'
+					selectedUnitOptions[i].unitOption.display_name === 'Path of Fire' ||
+					selectedUnitOptions[i].unitOption.display_name === 'Wiltfather'
 				)
 			) {
 				selectedUnitOptions.splice(selectedUnitOptions.indexOf(selectedUnitOptions[i]), 1)
