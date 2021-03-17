@@ -619,6 +619,11 @@ class KowInnerContainer extends Component {
 				) {
 					locked = true
 				}
+				if (
+					units[i].name.includes('Elohi') === true
+				) {
+					locked = true
+				}
 			}
 			
 			if (locked === true) {
