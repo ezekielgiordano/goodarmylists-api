@@ -90,6 +90,33 @@ wmr_magic_items.each do |row|
 end
 wmr_magic_items_json = wmr_magic_items_array.to_json
 
+# Epic Armageddon
+
+# ea_armies = data.exec('SELECT * FROM ea_armies;')
+# unsorted_ea_armies_array = []
+# ea_armies.each do |row|
+# 	unsorted_ea_armies_array << row
+# end
+# ea_armies_array = unsorted_ea_armies_array.sort {
+#             |x, y| x['display_name'].sub(/^(A|An|The)\s/i, "").downcase <=>
+#             y['display_name'].sub(/^(A|An|The)\s/i, "").downcase
+#         }
+# ea_armies_json = ea_armies_array.to_json
+
+# ea_formations = data.exec('SELECT * FROM ea_formations;')
+# ea_formations_array = []
+# ea_formations.each do |row|
+# 	ea_formations_array << row
+# end
+# ea_formations_json = ea_formations_array.to_json
+
+# ea_upgrades = data.exec('SELECT * FROM ea_upgrades;')
+# ea_upgrades_array = []
+# ea_upgrades.each do |row|
+# 	ea_upgrades_array << row
+# end
+# ea_upgrades_json = ea_upgrades_array.to_json
+
 # ROUTES
 
 get '/api/v1/games' do
@@ -145,3 +172,21 @@ get '/api/v1/wmr_magic_items' do
 	content_type :json
 	wmr_magic_items_json
 end
+
+# Epic Armageddon
+
+# get '/api/v1/ea_armies' do
+# 	content_type :json
+# 	ea_armies_json
+# end
+
+# get '/api/v1/ea_formations' do
+# 	content_type :json
+# 	ea_formations_json
+# end
+
+# get '/api/v1/ea_upgrades' do
+# 	content_type :json
+# 	ea_upgrades_json
+# end
+
